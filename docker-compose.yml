@@ -1,0 +1,49 @@
+# Docker Compose configuration for QKD BB84 Protocol Application
+# Simplifies deployment and local development
+
+version: '3.8'
+
+services:
+  qkd-app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    
+    container_name: qkd-secure-communication
+    
+    ports:
+      - "5000:5000"
+    
+    environment:
+      FLASK_ENV: production
+      PYTHONUNBUFFERED: 1
+    
+    volumes:
+      - ./logs:/app/logs
+    
+    restart: unless-stopped
+    
+    networks:
+      - qkd-network
+    
+    # Security options
+    security_opt:
+      - no-new-privileges:true
+    
+    # Resource limits
+    deploy:
+      resources:
+        limits:
+          cpus: '1'
+          memory: 512M
+        reservations:
+          cpus: '0.5'
+          memory: 256M
+
+networks:
+  qkd-network:
+    driver: bridge
+
+volumes:
+  logs:
+    driver: local
