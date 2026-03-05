@@ -1,0 +1,786 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>QKD BB84 Simulator - Interactive Quantum Key Distribution</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        :root {
+            --primary: #00d4ff;
+            --secondary: #7c3aed;
+            --success: #10b981;
+            --danger: #ef4444;
+            --warning: #f59e0b;
+            --bg: #0b0f1a;
+            --surface: #131929;
+            --card: #1a2238;
+            --border: #253050;
+            --text: #e2e8f0;
+            --muted: #94a3b8;
+        }
+
+        body {
+            font-family: 'Segoe UI', system-ui, sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            min-height: 100vh;
+        }
+
+        header {
+            background: var(--card);
+            border-bottom: 2px solid var(--border);
+            padding: 1rem 2rem;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        nav {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--primary);
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+            list-style: none;
+        }
+
+        .nav-links a {
+            color: var(--text);
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+
+        .nav-links a:hover, .nav-links a.active {
+            color: var(--primary);
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        .simulator-layout {
+            display: grid;
+            grid-template-columns: 300px 1fr 300px;
+            gap: 2rem;
+        }
+
+        .control-panel {
+            background: var(--card);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 1.5rem;
+            height: fit-content;
+            position: sticky;
+            top: 120px;
+        }
+
+        .message-panel {
+            background: var(--card);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 1.5rem;
+            height: fit-content;
+            position: sticky;
+            top: 120px;
+        }
+
+        .message-log {
+            max-height: 400px;
+            overflow-y: auto;
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            padding: 1rem;
+            font-family: 'Consolas', 'Courier New', monospace;
+            font-size: 0.85rem;
+            line-height: 1.4;
+        }
+
+        .message-item {
+            margin-bottom: 0.5rem;
+            padding: 0.25rem 0;
+            border-left: 3px solid var(--muted);
+        }
+
+        .message-item.alice { border-left-color: #3b82f6; }
+        .message-item.bob { border-left-color: #10b981; }
+        .message-item.eve { border-left-color: #ef4444; }
+        .message-item.system { border-left-color: var(--primary); }
+        .message-item.error { border-left-color: var(--danger); }
+        .message-item.success { border-left-color: var(--success); }
+        .message-item.warning { border-left-color: var(--warning); }
+
+        .message-timestamp {
+            color: var(--muted);
+            font-size: 0.8rem;
+            margin-right: 0.5rem;
+        }
+
+        .message-sender {
+            font-weight: 700;
+            margin-right: 0.5rem;
+        }
+
+        .server-status {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 0.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .server-item {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            padding: 0.75rem;
+            text-align: center;
+            font-size: 0.9rem;
+        }
+
+        .server-name {
+            font-weight: 600;
+            margin-bottom: 0.25rem;
+        }
+
+        .server-status-dot {
+            display: inline-block;
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            margin-right: 0.25rem;
+        }
+
+        .status-online { background: var(--success); }
+        .status-offline { background: var(--danger); }
+        .status-unknown { background: var(--warning); }
+
+        .panel-title {
+            font-size: 1.1rem;
+            font-weight: 700;
+            color: var(--primary);
+            margin-bottom: 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        label {
+            display: block;
+            font-size: 0.9rem;
+            color: var(--muted);
+            margin-bottom: 0.5rem;
+        }
+
+        input[type="number"], input[type="text"] {
+            width: 100%;
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            padding: 0.75rem;
+            color: var(--text);
+            font-size: 1rem;
+            outline: none;
+            transition: border-color 0.3s;
+        }
+
+        input:focus {
+            border-color: var(--primary);
+        }
+
+        .toggle-switch {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            padding: 0.75rem;
+            cursor: pointer;
+            user-select: none;
+        }
+
+        .toggle-switch input { display: none; }
+
+        .toggle-label {
+            font-size: 1rem;
+            transition: color 0.3s;
+        }
+
+        .toggle-switch input:checked + .toggle-label {
+            color: var(--danger);
+        }
+
+        .btn {
+            width: 100%;
+            padding: 0.75rem;
+            border: none;
+            border-radius: 6px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-size: 1rem;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white;
+        }
+
+        .btn-primary:hover:not(:disabled) {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(0, 212, 255, 0.3);
+        }
+
+        .btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        .main-content {
+            display: grid;
+            gap: 2rem;
+        }
+
+        .protocol-flow {
+            background: var(--card);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 2rem;
+        }
+
+        .flow-diagram {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin: 2rem 0;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+
+        .flow-step {
+            background: var(--surface);
+            border: 2px solid var(--border);
+            border-radius: 8px;
+            padding: 1rem;
+            text-align: center;
+            min-width: 120px;
+            transition: all 0.3s;
+        }
+
+        .flow-step.active {
+            border-color: var(--primary);
+            background: rgba(0, 212, 255, 0.1);
+        }
+
+        .flow-step.eve {
+            border-color: var(--danger);
+            opacity: 0.5;
+        }
+
+        .flow-step.eve.active {
+            opacity: 1;
+        }
+
+        .flow-arrow {
+            font-size: 1.5rem;
+            color: var(--muted);
+        }
+
+        .results-section {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .metric-card {
+            background: var(--card);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 1.5rem;
+        }
+
+        .metric-value {
+            font-size: 2rem;
+            font-weight: 800;
+            margin-bottom: 0.5rem;
+        }
+
+        .metric-label {
+            color: var(--muted);
+            font-size: 0.9rem;
+        }
+
+        .status-card {
+            grid-column: 1 / -1;
+            background: var(--card);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 2rem;
+            text-align: center;
+        }
+
+        .status-secure {
+            border-color: var(--success);
+            background: rgba(16, 185, 129, 0.1);
+        }
+
+        .status-insecure {
+            border-color: var(--danger);
+            background: rgba(239, 68, 68, 0.1);
+        }
+
+        .status-message {
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+        }
+
+        .encryption-section {
+            background: var(--card);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 2rem;
+        }
+
+        .mono {
+            font-family: 'Consolas', 'Courier New', monospace;
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            padding: 1rem;
+            word-break: break-all;
+            color: var(--primary);
+            margin-top: 0.5rem;
+        }
+
+        .qubit-table {
+            background: var(--card);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 2rem;
+            overflow-x: auto;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.9rem;
+        }
+
+        th, td {
+            padding: 0.75rem;
+            text-align: center;
+            border-bottom: 1px solid var(--border);
+        }
+
+        th {
+            background: var(--surface);
+            color: var(--muted);
+            font-weight: 600;
+        }
+
+        .bit-0 { color: var(--muted); }
+        .bit-1 { color: var(--primary); font-weight: 700; }
+        .basis-plus { color: #60a5fa; }
+        .basis-x { color: #c084fc; }
+        .match-yes { color: var(--success); }
+        .match-no { color: var(--muted); }
+
+        .loading {
+            display: none;
+            text-align: center;
+            padding: 4rem;
+            color: var(--muted);
+        }
+
+        .spinner {
+            width: 40px;
+            height: 40px;
+            border: 4px solid var(--border);
+            border-top-color: var(--primary);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 1rem;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        .hidden { display: none; }
+
+        @media (max-width: 768px) {
+            .simulator-layout { grid-template-columns: 1fr; }
+            .control-panel { position: static; }
+            .flow-diagram { flex-direction: column; }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <nav>
+            <div class="logo">⚛ QKD BB84</div>
+            <ul class="nav-links">
+                <li><a href="/">Home</a></li>
+                <li><a href="/simulator" class="active">Simulator</a></li>
+                <li><a href="/documentation">Documentation</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <div class="container">
+        <div class="simulator-layout">
+            <div class="control-panel">
+                <div class="panel-title">⚙ Simulation Controls</div>
+
+                <div class="form-group">
+                    <label for="numQubits">Number of Qubits</label>
+                    <input type="number" id="numQubits" value="100" min="10" max="1000" step="10">
+                </div>
+
+                <div class="form-group">
+                    <label for="message">Message to Encrypt</label>
+                    <input type="text" id="message" value="Hello, Quantum World!" maxlength="100">
+                </div>
+
+                <div class="form-group">
+                    <label>Eve (Eavesdropper)</label>
+                    <div class="toggle-switch" onclick="toggleEve()">
+                        <input type="checkbox" id="eveEnabled">
+                        <span class="toggle-label" id="eveLabel">Disabled</span>
+                    </div>
+                </div>
+
+                <button class="btn btn-primary" id="runBtn" onclick="runSimulation()">▶ Run QKD Simulation</button>
+            </div>
+
+            <div class="main-content">
+                <div class="protocol-flow">
+                    <div class="panel-title">🔄 BB84 Protocol Flow</div>
+                    <div class="flow-diagram">
+                        <div class="flow-step active" id="aliceStep">
+                            <div style="font-size: 1.5rem; margin-bottom: 0.5rem;">🧑‍💻</div>
+                            <div>Alice</div>
+                            <div style="font-size: 0.8rem; color: var(--muted);">Qubit Prep</div>
+                        </div>
+                        <div class="flow-arrow">→</div>
+                        <div class="flow-step eve" id="eveStep">
+                            <div style="font-size: 1.5rem; margin-bottom: 0.5rem;">👁</div>
+                            <div>Eve</div>
+                            <div style="font-size: 0.8rem; color: var(--muted);">Intercept</div>
+                        </div>
+                        <div class="flow-arrow">→</div>
+                        <div class="flow-step" id="bobStep">
+                            <div style="font-size: 1.5rem; margin-bottom: 0.5rem;">🧑‍💻</div>
+                            <div>Bob</div>
+                            <div style="font-size: 0.8rem; color: var(--muted);">Measure</div>
+                        </div>
+                        <div class="flow-arrow">→</div>
+                        <div class="flow-step" id="siftStep">
+                            <div style="font-size: 1.5rem; margin-bottom: 0.5rem;">🔑</div>
+                            <div>Sifting</div>
+                            <div style="font-size: 0.8rem; color: var(--muted);">QBER Check</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="loading" id="loading">
+                    <div class="spinner"></div>
+                    <p>Running BB84 quantum key distribution...</p>
+                </div>
+
+                <div id="results" class="hidden">
+                    <div class="results-section">
+                        <div class="metric-card">
+                            <div class="metric-value" id="statQubits">-</div>
+                            <div class="metric-label">Qubits Transmitted</div>
+                        </div>
+                        <div class="metric-card">
+                            <div class="metric-value" id="statSift">-</div>
+                            <div class="metric-label">Sifted Key Length</div>
+                            <div style="font-size: 0.8rem; color: var(--muted); margin-top: 0.25rem;">bits after basis matching</div>
+                        </div>
+                        <div class="metric-card">
+                            <div class="metric-value" id="statQBER">-</div>
+                            <div class="metric-label">Quantum Bit Error Rate</div>
+                            <div style="font-size: 0.8rem; color: var(--muted); margin-top: 0.25rem;">threshold: < 11%</div>
+                        </div>
+                        <div class="metric-card">
+                            <div class="metric-value" id="statErrors">-</div>
+                            <div class="metric-label">Bit Errors Detected</div>
+                            <div style="font-size: 0.8rem; color: var(--muted); margin-top: 0.25rem;" id="errorSub">out of total sifted bits</div>
+                        </div>
+                    </div>
+
+                    <div class="status-card" id="statusCard">
+                        <div class="status-message" id="statusMessage">Waiting for simulation...</div>
+                        <div id="statusDetails"></div>
+                    </div>
+
+                    <div class="encryption-section" id="encryptionSection">
+                        <div class="panel-title">🔐 Quantum Key & Encryption</div>
+
+                        <div style="margin-bottom: 1.5rem;">
+                            <label style="display: block; margin-bottom: 0.5rem;">Shared Quantum Key (SHA-256 hash)</label>
+                            <div class="mono" id="keyHex">-</div>
+                        </div>
+
+                        <div style="margin-bottom: 1.5rem;">
+                            <label style="display: block; margin-bottom: 0.5rem;">Encrypted Message (XOR cipher)</label>
+                            <div class="mono" id="encrypted">-</div>
+                        </div>
+
+                        <div>
+                            <label style="display: block; margin-bottom: 0.5rem;">Decrypted Message (Bob's side)</label>
+                            <div class="mono" style="color: var(--success);" id="decrypted">-</div>
+                        </div>
+                    </div>
+
+                    <div class="qubit-table">
+                        <div class="panel-title">📊 Qubit-by-Qubit Analysis (First 20)</div>
+                        <div style="overflow-x: auto;">
+                            <table id="qubitTable">
+                                <thead>
+                                    <tr>
+                                        <th>#</th>
+                                        <th>Alice Bit</th>
+                                        <th>Alice Basis</th>
+                                        <th>Quantum State</th>
+                                        <th id="eveHeader" style="display: none;">Eve Basis</th>
+                                        <th>Bob Basis</th>
+                                        <th>Bob Bit</th>
+                                        <th>Bases Match</th>
+                                        <th>Sifted Result</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="qubitBody"></tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="message-panel">
+                <div class="panel-title">📡 Live Communication Feed</div>
+
+                <div style="margin-bottom: 1rem;">
+                    <div class="panel-title" style="font-size: 0.95rem; margin: 0; color: var(--muted);">Server Status</div>
+                    <div class="server-status">
+                        <div class="server-item">
+                            <div class="server-name">Alice</div>
+                            <div>
+                                <span class="server-status-dot status-unknown" id="statusAlice"></span>
+                                <span id="statusAliceText">Unknown</span>
+                            </div>
+                        </div>
+                        <div class="server-item">
+                            <div class="server-name">Eve</div>
+                            <div>
+                                <span class="server-status-dot status-unknown" id="statusEve"></span>
+                                <span id="statusEveText">Unknown</span>
+                            </div>
+                        </div>
+                        <div class="server-item">
+                            <div class="server-name">Bob</div>
+                            <div>
+                                <span class="server-status-dot status-unknown" id="statusBob"></span>
+                                <span id="statusBobText">Unknown</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div style="margin-bottom: 0.5rem; font-size: 0.9rem; color: var(--muted); display: flex; justify-content: space-between;">
+                    <div>Messages</div>
+                    <button style="background: none; border: none; color: var(--primary); cursor: pointer; font-size: 0.8rem;" onclick="clearMessages()">Clear</button>
+                </div>
+
+                <div class="message-log" id="messageLog">
+                    <div class="message-item system">
+                        <span class="message-timestamp">--:--:--</span>
+                        <span class="message-sender">SYSTEM:</span>
+                        Waiting for activity...
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let currentStep = 0;
+        const steps = ['aliceStep', 'eveStep', 'bobStep', 'siftStep'];
+
+        function toggleEve() {
+            const checkbox = document.getElementById('eveEnabled');
+            const label = document.getElementById('eveLabel');
+            const eveStep = document.getElementById('eveStep');
+
+            checkbox.checked = !checkbox.checked;
+
+            if (checkbox.checked) {
+                label.textContent = 'Enabled';
+                label.style.color = 'var(--danger)';
+                eveStep.classList.add('active');
+            } else {
+                label.textContent = 'Disabled';
+                label.style.color = 'var(--muted)';
+                eveStep.classList.remove('active');
+            }
+        }
+
+        function updateFlow(step) {
+            steps.forEach((stepId, index) => {
+                const element = document.getElementById(stepId);
+                if (index <= step) {
+                    element.classList.add('active');
+                } else {
+                    element.classList.remove('active');
+                }
+            });
+        }
+
+        async function runSimulation() {
+            const btn = document.getElementById('runBtn');
+            const loading = document.getElementById('loading');
+            const results = document.getElementById('results');
+
+            btn.disabled = true;
+            loading.style.display = 'block';
+            results.classList.add('hidden');
+
+            currentStep = 0;
+            updateFlow(-1);
+
+            try {
+                // Simulate protocol steps
+                setTimeout(() => updateFlow(0), 500);  // Alice
+                setTimeout(() => updateFlow(1), 1000); // Eve
+                setTimeout(() => updateFlow(2), 1500); // Bob
+                setTimeout(() => updateFlow(3), 2000); // Sifting
+
+                const response = await fetch('/api/run_qkd', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        num_qubits: parseInt(document.getElementById('numQubits').value),
+                        message: document.getElementById('message').value,
+                        eve_enabled: document.getElementById('eveEnabled').checked
+                    })
+                });
+
+                const data = await response.json();
+
+                if (data.error) {
+                    alert('Error: ' + data.error);
+                    return;
+                }
+
+                displayResults(data);
+
+            } catch (error) {
+                alert('Request failed: ' + error.message);
+            } finally {
+                btn.disabled = false;
+                loading.style.display = 'none';
+            }
+        }
+
+        function displayResults(data) {
+            const results = document.getElementById('results');
+            results.classList.remove('hidden');
+
+            // Update metrics
+            document.getElementById('statQubits').textContent = data.num_qubits;
+            document.getElementById('statSift').textContent = data.sift_count;
+            document.getElementById('statQBER').textContent = data.qber_pct;
+            document.getElementById('statErrors').textContent = data.errors;
+            document.getElementById('errorSub').textContent = `out of ${data.total} sifted bits`;
+
+            // Update status
+            const statusCard = document.getElementById('statusCard');
+            const statusMessage = document.getElementById('statusMessage');
+
+            if (data.secure) {
+                statusCard.className = 'status-card status-secure';
+                statusMessage.textContent = '✅ Communication Secure';
+            } else {
+                statusCard.className = 'status-card status-insecure';
+                statusMessage.textContent = '🚨 Eavesdropping Detected';
+            }
+
+            // Update encryption section
+            const encryptionSection = document.getElementById('encryptionSection');
+            if (data.secure) {
+                encryptionSection.style.display = 'block';
+                document.getElementById('keyHex').textContent = data.key_hex || '-';
+                document.getElementById('encrypted').textContent = data.encrypted || '-';
+                document.getElementById('decrypted').textContent = data.decrypted || '-';
+            } else {
+                encryptionSection.style.display = 'none';
+            }
+
+            // Update qubit table
+            const eveHeader = document.getElementById('eveHeader');
+            eveHeader.style.display = data.eve_enabled ? 'table-cell' : 'none';
+
+            const tbody = document.getElementById('qubitBody');
+            tbody.innerHTML = '';
+
+            const n = Math.min(20, data.alice_bits_preview.length);
+            for (let i = 0; i < n; i++) {
+                const aBit = data.alice_bits_preview[i];
+                const aBasis = data.alice_bases_preview[i];
+                const aState = data.alice_states_preview[i];
+                const bBasis = data.bob_bases_preview[i];
+                const bBit = data.bob_bits_preview[i];
+                const eveBasis = data.eve_bases_preview[i] || '-';
+                const match = aBasis === bBasis;
+
+                const tr = document.createElement('tr');
+                if (match) tr.style.background = 'rgba(16, 185, 129, 0.1)';
+
+                tr.innerHTML = `
+                    <td>${i + 1}</td>
+                    <td class="bit-${aBit}">${aBit}</td>
+                    <td class="basis-${aBasis === '+' ? 'plus' : 'x'}">${aBasis}</td>
+                    <td>${aState}</td>
+                    ${data.eve_enabled ? `<td class="basis-${eveBasis === '+' ? 'plus' : 'x'}">${eveBasis}</td>` : ''}
+                    <td class="basis-${bBasis === '+' ? 'plus' : 'x'}">${bBasis}</td>
+                    <td class="bit-${bBit}">${bBit}</td>
+                    <td class="${match ? 'match-yes' : 'match-no'}">${match ? '✓ Yes' : '✗ No'}</td>
+                    <td>${match ? (aBit === bBit ? '<span style="color: var(--success);">OK</span>' : '<span style="color: var(--danger);">ERR</span>') : '-'}</td>
+                `;
+
+                tbody.appendChild(tr);
+            }
+        }
+
+        // Initialize
+        document.addEventListener('DOMContentLoaded', function() {
+            updateFlow(-1);
+        });
+    </script>
+</body>
+</html>

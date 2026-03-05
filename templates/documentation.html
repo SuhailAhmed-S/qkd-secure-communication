@@ -1,0 +1,536 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>QKD BB84 Documentation - Understanding Quantum Key Distribution</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        :root {
+            --primary: #00d4ff;
+            --secondary: #7c3aed;
+            --success: #10b981;
+            --danger: #ef4444;
+            --warning: #f59e0b;
+            --bg: #0b0f1a;
+            --surface: #131929;
+            --card: #1a2238;
+            --border: #253050;
+            --text: #e2e8f0;
+            --muted: #94a3b8;
+        }
+
+        body {
+            font-family: 'Segoe UI', system-ui, sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            min-height: 100vh;
+        }
+
+        header {
+            background: var(--card);
+            border-bottom: 2px solid var(--border);
+            padding: 1rem 2rem;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        nav {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--primary);
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+            list-style: none;
+        }
+
+        .nav-links a {
+            color: var(--text);
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+
+        .nav-links a:hover, .nav-links a.active {
+            color: var(--primary);
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        .doc-section {
+            background: var(--card);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+        }
+
+        .section-title {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--primary);
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .subsection-title {
+            font-size: 1.2rem;
+            font-weight: 600;
+            color: var(--text);
+            margin: 1.5rem 0 1rem 0;
+        }
+
+        p {
+            line-height: 1.6;
+            margin-bottom: 1rem;
+            color: var(--muted);
+        }
+
+        .highlight {
+            background: var(--surface);
+            border-left: 4px solid var(--primary);
+            padding: 1rem;
+            margin: 1rem 0;
+            border-radius: 0 6px 6px 0;
+        }
+
+        .highlight.danger {
+            border-left-color: var(--danger);
+            background: rgba(239, 68, 68, 0.1);
+        }
+
+        .highlight.success {
+            border-left-color: var(--success);
+            background: rgba(16, 185, 129, 0.1);
+        }
+
+        .code-block {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            padding: 1rem;
+            margin: 1rem 0;
+            font-family: 'Consolas', 'Courier New', monospace;
+            font-size: 0.9rem;
+            overflow-x: auto;
+            color: var(--primary);
+        }
+
+        .formula {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            padding: 1rem;
+            margin: 1rem 0;
+            text-align: center;
+            font-family: 'Times New Roman', serif;
+            font-size: 1.2rem;
+            color: var(--warning);
+        }
+
+        .steps {
+            counter-reset: step-counter;
+        }
+
+        .step {
+            counter-increment: step-counter;
+            margin: 1rem 0;
+            padding: 1rem;
+            background: var(--surface);
+            border-radius: 6px;
+            border-left: 4px solid var(--secondary);
+            position: relative;
+        }
+
+        .step::before {
+            content: counter(step-counter);
+            position: absolute;
+            left: -1rem;
+            top: 1rem;
+            background: var(--secondary);
+            color: white;
+            width: 2rem;
+            height: 2rem;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 0.9rem;
+        }
+
+        .comparison-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 1rem 0;
+            background: var(--surface);
+            border-radius: 6px;
+            overflow: hidden;
+        }
+
+        .comparison-table th,
+        .comparison-table td {
+            padding: 1rem;
+            text-align: left;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .comparison-table th {
+            background: var(--card);
+            color: var(--primary);
+            font-weight: 600;
+        }
+
+        .comparison-table tr:nth-child(even) {
+            background: rgba(255, 255, 255, 0.02);
+        }
+
+        .metric-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+            margin: 1rem 0;
+        }
+
+        .metric-item {
+            background: var(--surface);
+            padding: 1rem;
+            border-radius: 6px;
+            text-align: center;
+        }
+
+        .metric-value {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--primary);
+            display: block;
+        }
+
+        .metric-label {
+            font-size: 0.9rem;
+            color: var(--muted);
+            margin-top: 0.5rem;
+        }
+
+        .quantum-state {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            padding: 1rem;
+            margin: 1rem 0;
+            text-align: center;
+        }
+
+        .state-symbol {
+            font-size: 2rem;
+            color: var(--primary);
+            margin-bottom: 0.5rem;
+        }
+
+        .state-desc {
+            font-size: 0.9rem;
+            color: var(--muted);
+        }
+
+        .security-proof {
+            background: linear-gradient(135deg, var(--success), var(--secondary));
+            color: white;
+            padding: 2rem;
+            border-radius: 12px;
+            margin: 2rem 0;
+            text-align: center;
+        }
+
+        .security-proof h3 {
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .security-proof p {
+            opacity: 0.9;
+            font-size: 1.1rem;
+        }
+
+        @media (max-width: 768px) {
+            .container { padding: 1rem; }
+            .doc-section { padding: 1rem; }
+            .metric-grid { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <nav>
+            <div class="logo">⚛ QKD BB84</div>
+            <ul class="nav-links">
+                <li><a href="/">Home</a></li>
+                <li><a href="/simulator">Simulator</a></li>
+                <li><a href="/documentation" class="active">Documentation</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <div class="container">
+        <div class="doc-section">
+            <div class="section-title">📚 QKD BB84 Documentation</div>
+            <p>Welcome to the comprehensive guide for Quantum Key Distribution using the BB84 protocol. This documentation explains the fundamental concepts, mathematical principles, and practical implementation of quantum cryptography.</p>
+        </div>
+
+        <div class="doc-section">
+            <div class="section-title">🔬 What is Quantum Key Distribution?</div>
+            <p>Quantum Key Distribution (QKD) is a method of secure communication that uses quantum mechanics to guarantee the security of cryptographic keys. Unlike traditional cryptography, QKD provides information-theoretic security - security that is guaranteed by the laws of physics rather than computational complexity.</p>
+
+            <div class="highlight">
+                <strong>Key Insight:</strong> In quantum mechanics, measuring a quantum system inevitably disturbs it. This fundamental property allows legitimate users to detect eavesdropping attempts.
+            </div>
+        </div>
+
+        <div class="doc-section">
+            <div class="section-title">🎯 The BB84 Protocol</div>
+            <p>The BB84 protocol, named after its inventors Charles Bennett and Gilles Brassard in 1984, is the first and most widely studied QKD protocol. It uses single photons to transmit cryptographic keys.</p>
+
+            <div class="subsection-title">Protocol Overview</div>
+            <div class="steps">
+                <div class="step">
+                    <strong>Alice prepares qubits:</strong> Alice randomly chooses bits (0 or 1) and randomly chooses measurement bases (+ or ×) for each qubit.
+                </div>
+                <div class="step">
+                    <strong>Alice sends qubits:</strong> Alice sends the prepared qubits to Bob through a quantum channel.
+                </div>
+                <div class="step">
+                    <strong>Bob measures qubits:</strong> Bob randomly chooses measurement bases and measures each received qubit.
+                </div>
+                <div class="step">
+                    <strong>Public discussion:</strong> Alice and Bob publicly compare their chosen bases (but not the bit values).
+                </div>
+                <div class="step">
+                    <strong>Key sifting:</strong> They keep only the bits where they used the same basis, discarding the rest.
+                </div>
+                <div class="step">
+                    <strong>Error estimation:</strong> They sample a portion of their sifted key to estimate the quantum bit error rate (QBER).
+                </div>
+                <div class="step">
+                    <strong>Privacy amplification:</strong> If QBER is below threshold, they perform privacy amplification to create the final secure key.
+                </div>
+            </div>
+        </div>
+
+        <div class="doc-section">
+            <div class="section-title">⚛ Quantum Mechanics Fundamentals</div>
+
+            <div class="subsection-title">Photon Polarization States</div>
+            <p>The BB84 protocol uses the polarization of single photons as quantum bits (qubits). Photons can be polarized in different ways:</p>
+
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem; margin: 1rem 0;">
+                <div class="quantum-state">
+                    <div class="state-symbol">↕</div>
+                    <div class="state-desc">Vertical (0°)</div>
+                    <div style="font-size: 0.8rem; margin-top: 0.5rem;">Bit: 0, Basis: +</div>
+                </div>
+                <div class="quantum-state">
+                    <div class="state-symbol">↔</div>
+                    <div class="state-desc">Horizontal (90°)</div>
+                    <div style="font-size: 0.8rem; margin-top: 0.5rem;">Bit: 1, Basis: +</div>
+                </div>
+                <div class="quantum-state">
+                    <div class="state-symbol">⤢</div>
+                    <div class="state-desc">Diagonal (45°)</div>
+                    <div style="font-size: 0.8rem; margin-top: 0.5rem;">Bit: 0, Basis: ×</div>
+                </div>
+                <div class="quantum-state">
+                    <div class="state-symbol">⤡</div>
+                    <div class="state-desc">Anti-diagonal (135°)</div>
+                    <div style="font-size: 0.8rem; margin-top: 0.5rem;">Bit: 1, Basis: ×</div>
+                </div>
+            </div>
+
+            <div class="subsection-title">Measurement Uncertainty</div>
+            <p>The key quantum property exploited by BB84 is the Heisenberg uncertainty principle for measurement. When Eve tries to measure a qubit in the wrong basis, she has a 50% chance of getting the wrong result, introducing detectable errors.</p>
+
+            <div class="formula">
+                P(error|Eve intercepts) = 25%
+            </div>
+
+            <p>This means that if Eve intercepts and re-sends all qubits, the QBER will be exactly 25%, which is well above the security threshold.</p>
+        </div>
+
+        <div class="doc-section">
+            <div class="section-title">🛡️ Security Analysis</div>
+
+            <div class="subsection-title">Quantum Bit Error Rate (QBER)</div>
+            <p>The QBER is the fraction of bits that differ between Alice and Bob after basis reconciliation:</p>
+
+            <div class="formula">
+                QBER = (Number of errors) / (Total sifted bits)
+            </div>
+
+            <div class="metric-grid">
+                <div class="metric-item">
+                    <span class="metric-value">0%</span>
+                    <div class="metric-label">No Eavesdropping</div>
+                </div>
+                <div class="metric-item">
+                    <span class="metric-value">~5%</span>
+                    <div class="metric-label">Channel Noise</div>
+                </div>
+                <div class="metric-item">
+                    <span class="metric-value">25%</span>
+                    <div class="metric-label">Full Eavesdropping</div>
+                </div>
+                <div class="metric-item">
+                    <span class="metric-value">>11%</span>
+                    <div class="metric-label">Security Threshold</div>
+                </div>
+            </div>
+
+            <div class="subsection-title">Security Threshold</div>
+            <p>The BB84 protocol is secure as long as QBER < 11%. Above this threshold, the key is considered compromised and should be discarded.</p>
+
+            <div class="security-proof">
+                <h3>🔒 Information-Theoretic Security</h3>
+                <p>BB84 security is based on the laws of quantum physics, not computational assumptions. Even with unlimited computing power, an eavesdropper cannot break the encryption without being detected.</p>
+            </div>
+        </div>
+
+        <div class="doc-section">
+            <div class="section-title">💻 Implementation Details</div>
+
+            <div class="subsection-title">Simulation Architecture</div>
+            <p>This implementation uses a distributed architecture with separate servers for Alice, Bob, and Eve:</p>
+
+            <table class="comparison-table">
+                <thead>
+                    <tr>
+                        <th>Component</th>
+                        <th>Role</th>
+                        <th>Port</th>
+                        <th>Description</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><strong>alice_server.py</strong></td>
+                        <td>Sender</td>
+                        <td>5001</td>
+                        <td>Prepares and sends qubits</td>
+                    </tr>
+                    <tr>
+                        <td><strong>bob_server.py</strong></td>
+                        <td>Receiver</td>
+                        <td>5002</td>
+                        <td>Measures received qubits</td>
+                    </tr>
+                    <tr>
+                        <td><strong>eve_server.py</strong></td>
+                        <td>Eavesdropper</td>
+                        <td>5003</td>
+                        <td>Intercepts and re-sends qubits</td>
+                    </tr>
+                    <tr>
+                        <td><strong>app.py</strong></td>
+                        <td>Web Interface</td>
+                        <td>8000</td>
+                        <td>Flask web application</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <div class="subsection-title">Key Generation Process</div>
+            <div class="code-block">
+# Example: 4-qubit BB84 simulation
+Alice bits:     [0, 1, 0, 1]
+Alice bases:    [+, ×, +, ×]
+Quantum states: [↕, ⤡, ↔, ⤡]
+
+Bob bases:      [+, +, ×, ×]
+Bob measurements: [0, 1, 0, 1]
+
+Sifted key:     [0, ?, 0, 1]  (where bases matched)
+Final key:      [0, 0, 1]     (after error correction)
+            </div>
+        </div>
+
+        <div class="doc-section">
+            <div class="section-title">🚀 Using the Simulator</div>
+
+            <div class="subsection-title">Quick Start</div>
+            <ol style="padding-left: 1.5rem;">
+                <li style="margin-bottom: 0.5rem;">Navigate to the <a href="/simulator" style="color: var(--primary);">Simulator</a> page</li>
+                <li style="margin-bottom: 0.5rem;">Adjust the number of qubits (10-1000)</li>
+                <li style="margin-bottom: 0.5rem;">Enter a message to encrypt</li>
+                <li style="margin-bottom: 0.5rem;">Optionally enable Eve (eavesdropper)</li>
+                <li style="margin-bottom: 0.5rem;">Click "Run QKD Simulation"</li>
+            </ol>
+
+            <div class="subsection-title">Understanding Results</div>
+            <div class="highlight success">
+                <strong>Secure Communication:</strong> QBER < 11%, encryption successful
+            </div>
+
+            <div class="highlight danger">
+                <strong>Eavesdropping Detected:</strong> QBER ≥ 11%, communication aborted
+            </div>
+
+            <div class="subsection-title">Real-World Considerations</div>
+            <p>In practice, QKD systems face several challenges:</p>
+            <ul style="padding-left: 1.5rem; color: var(--muted);">
+                <li style="margin-bottom: 0.5rem;"><strong>Photon loss:</strong> Photons can be absorbed or scattered</li>
+                <li style="margin-bottom: 0.5rem;"><strong>Detector efficiency:</strong> Imperfect photon detection</li>
+                <li style="margin-bottom: 0.5rem;"><strong>Channel noise:</strong> Environmental interference</li>
+                <li style="margin-bottom: 0.5rem;"><strong>Distance limitations:</strong> ~100-200km for fiber optics</li>
+            </ul>
+        </div>
+
+        <div class="doc-section">
+            <div class="section-title">📖 Further Reading</div>
+
+            <div class="subsection-title">Academic Papers</div>
+            <ul style="padding-left: 1.5rem; color: var(--muted);">
+                <li style="margin-bottom: 0.5rem;"><strong>BB84 Original Paper:</strong> Bennett & Brassard (1984)</li>
+                <li style="margin-bottom: 0.5rem;"><strong>Security Proof:</strong> Shor & Preskill (2000)</li>
+                <li style="margin-bottom: 0.5rem;"><strong>Decoy State Protocol:</strong> Hwang (2003)</li>
+            </ul>
+
+            <div class="subsection-title">Online Resources</div>
+            <ul style="padding-left: 1.5rem; color: var(--muted);">
+                <li style="margin-bottom: 0.5rem;"><strong>IBM Quantum Experience:</strong> Hands-on quantum computing</li>
+                <li style="margin-bottom: 0.5rem;"><strong>QKD Alliance:</strong> Industry consortium</li>
+                <li style="margin-bottom: 0.5rem;"><strong>Quantum Cryptography:</strong> Research papers and tutorials</li>
+            </ul>
+        </div>
+
+        <div class="doc-section">
+            <div class="section-title">⚠️ Important Notes</div>
+
+            <div class="highlight">
+                <strong>Educational Purpose:</strong> This simulation demonstrates QKD concepts but is not suitable for real cryptographic applications. Production QKD systems require specialized hardware and additional security measures.
+            </div>
+
+            <div class="highlight">
+                <strong>Simplified Model:</strong> The simulation uses idealized quantum states and does not account for all real-world imperfections like photon loss, detector dark counts, or multi-photon pulses.
+            </div>
+        </div>
+    </div>
+</body>
+</html>

@@ -50,6 +50,9 @@ This project implements the **BB84 Quantum Key Distribution Protocol**, one of t
 - **Visual Results**: Color-coded display of quantum states and measurement bases
 - **Eavesdropping Simulation**: Toggle Eve's presence to see attack impact
 - **Message Encryption**: Demonstrate end-to-end encrypted communication
+- **Live Metrics Dashboard**: Real-time QBER, sifted key length, and security status
+- **Qubit Analysis Table**: Detailed view of basis matching and error detection
+- **Professional UI**: Responsive design with dark theme and smooth animations
 
 ### Technical Features
 - **Type Hints**: Complete type annotations for code clarity
@@ -57,6 +60,7 @@ This project implements the **BB84 Quantum Key Distribution Protocol**, one of t
 - **Error Handling**: Robust validation and error recovery
 - **Unit Tests**: 31+ test cases covering all components
 - **Docker Support**: Containerized deployment for easy distribution
+- **Flask Web Framework**: RESTful API with professional HTML templates
 
 ---
 
@@ -212,18 +216,25 @@ The application will be available at `http://localhost:5000`
    python app.py
    ```
 
-2. **Open in browser**: `http://localhost:5000`
+2. **Open in browser**: `http://localhost:8000`
 
-3. **Configure simulation**:
+3. **Navigate the interface**:
+   - **Home** (`/`): Protocol overview and feature showcase
+   - **Simulator** (`/simulator`): Interactive QKD simulation dashboard
+   - **Documentation** (`/documentation`): Comprehensive protocol guide
+
+4. **Configure simulation**:
    - Set number of qubits (10-1000)
    - Enter message to encrypt
    - Toggle Eve's eavesdropping
 
-4. **View results**:
+5. **View results**:
+   - Real-time protocol flow visualization
    - QBER percentage and security status
-   - Sifted key length
+   - Sifted key length and error statistics
    - Encrypted message and decrypted result
-   - Qubit-by-qubit breakdown table
+   - Qubit-by-qubit analysis table
+   - Live metrics dashboard
 
 ### Command-Line Usage
 
