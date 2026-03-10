@@ -22,6 +22,7 @@ import os
 import json
 import socket
 import time
+import threading
 from typing import Dict, Tuple, List, Optional
 
 # Add project directory to path for imports
@@ -71,23 +72,68 @@ def check_server_status(server_name: str) -> bool:
         server['status'] = 'offline'
         return False
 
-def send_to_server(server_name: str, data: Dict) -> Optional[Dict]:
+def send_to_server(server_name: str, data: Dict, retries: int = 3) -> Optional[Dict]:
     """Send data to a distributed server and get response."""
-    try:
-        server = SERVERS[server_name]
-        with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
-            s.settimeout(5.0)
-            s.connect((server['host'], server['port']))
-            s.sendall(json.dumps(data).encode())
+    for attempt in range(retries):
+        try:
+            server = SERVERS[server_name]
+            add_message('SYSTEM', f'Sending data to {server_name} on port {server["port"]} (attempt {attempt + 1}/{retries})', 'system')
+            with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
+                s.settimeout(10.0)
+                print(f"[DEBUG] Connecting to {server_name} at {server['host']}:{server['port']}")
+                s.connect((server['host'], server['port']))
+                json_data = json.dumps(data).encode()
+                print(f"[DEBUG] Sending {len(json_data)} bytes")
+                add_message('SYSTEM', f'Sending {len(json_data)} bytes to {server_name}', 'system')
+                s.sendall(json_data)
+                print(f"[DEBUG] Shutting down write side")
+                s.shutdown(socket.SHUT_WR)  # Signal end of data
+                print(f"[DEBUG] Successfully sent data to {server_name}")
+                add_message('SYSTEM', f'Successfully sent data to {server_name}', 'success')
+                return {}  # Alice will send result back via result server
+        except socket.timeout:
+            print(f"[DEBUG] Timeout connecting to {server_name} (attempt {attempt + 1}/{retries})")
+            add_message('SYSTEM', f'Timeout connecting to {server_name} (attempt {attempt + 1}/{retries})', 'warning')
+            if attempt < retries - 1:
+                continue
+        except ConnectionRefusedError:
+            print(f"[DEBUG] Connection refused by {server_name} (attempt {attempt + 1}/{retries})")
+            add_message('SYSTEM', f'Connection refused by {server_name} - is it running?', 'error')
+            if attempt < retries - 1:
+                continue
+        except Exception as e:
+            print(f"[DEBUG] Error sending to {server_name}: {str(e)}")
+            add_message('SYSTEM', f'Error sending to {server_name}: {str(e)}', 'error')
+            if attempt < retries - 1:
+                continue
+    
+    return None
 
-            # For servers that respond
-            if server_name in ['alice']:
-                response = s.recv(8192)
-                return json.loads(response.decode())
-    except Exception as e:
-        add_message('SYSTEM', f'Error communicating with {server_name}: {str(e)}', 'error')
+def wait_for_result(timeout: int = 30) -> Optional[Dict]:
+    """Wait for result from Alice server."""
+    add_message('SYSTEM', f'Waiting for result from Alice on port 9999 (timeout: {timeout}s)...', 'system')
+    try:
+        with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as server:
+            server.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
+            server.bind(('localhost', 9999))
+            server.settimeout(timeout)
+            server.listen(1)
+            add_message('SYSTEM', 'Listening for Alice result...', 'system')
+
+            conn, addr = server.accept()
+            add_message('SYSTEM', f'Connection from {addr} for result', 'success')
+            with conn:
+                response_data = conn.recv(65536).decode()
+                add_message('SYSTEM', f'Received {len(response_data)} bytes of result data', 'success')
+                result = json.loads(response_data)
+                add_message('SYSTEM', 'Result parsed successfully', 'success')
+                return result
+    except socket.timeout:
+        add_message('SYSTEM', 'Timeout waiting for results from Alice', 'error')
         return None
-    return {}
+    except Exception as e:
+        add_message('SYSTEM', f'Error receiving results: {str(e)}', 'error')
+        return None
 
 # Configuration constants
 MIN_QUBITS = 10
@@ -141,9 +187,50 @@ def api_clear_messages() -> Tuple[Dict, int]:
     message_log.clear()
     add_message('SYSTEM', 'Message log cleared', 'system')
     return jsonify({'status': 'cleared'}), 200
+
+
+# Global variable to store result from Alice
+qkd_result = {'result': None, 'ready': False}
+qkd_result_lock = threading.Lock()
+
+def result_listener_thread(timeout: int = 40):
+    """Listen for result from Alice in a separate thread."""
+    try:
+        add_message('SYSTEM', f'Starting result listener on port 9999 (timeout: {timeout}s)...', 'system')
+        with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as server:
+            server.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
+            server.bind(('localhost', 9999))
+            server.settimeout(timeout)
+            server.listen(1)
+            add_message('SYSTEM', 'Result listener ready, waiting for Alice...', 'system')
+
+            conn, addr = server.accept()
+            add_message('SYSTEM', f'Connection from {addr} for result', 'success')
+            with conn:
+                conn.settimeout(10.0)
+                response_data = b''
+                while True:
+                    chunk = conn.recv(4096)
+                    if not chunk:
+                        break
+                    response_data += chunk
+                
+                add_message('SYSTEM', f'Received {len(response_data)} bytes of result data', 'success')
+                result = json.loads(response_data.decode())
+                add_message('SYSTEM', 'Result parsed successfully', 'success')
+                
+                with qkd_result_lock:
+                    qkd_result['result'] = result
+                    qkd_result['ready'] = True
+    except socket.timeout:
+        add_message('SYSTEM', 'Result listener timeout - Alice did not respond', 'error')
+    except Exception as e:
+        add_message('SYSTEM', f'Result listener error: {str(e)}', 'error')
+
+@app.route('/api/run_qkd', methods=['POST'])
 def api_run_qkd() -> Tuple[Dict, int]:
     """
-    Execute the BB84 QKD protocol using distributed servers.
+    Execute the BB84 QKD protocol using in-process execution.
 
     HTTP Method: POST
     Content-Type: application/json
@@ -186,10 +273,10 @@ def api_run_qkd() -> Tuple[Dict, int]:
         }
 
     Processing:
-        1. Check server connectivity
-        2. Send configuration to Alice server
-        3. Monitor protocol execution through message log
-        4. Receive final results from Alice server
+        1. Validate input parameters
+        2. Execute QKD protocol in-process
+        3. Calculate QBER and security status
+        4. Encrypt/decrypt message
         5. Return formatted response
     """
     try:
@@ -216,39 +303,19 @@ def api_run_qkd() -> Tuple[Dict, int]:
         if not message or not isinstance(message, str):
             return jsonify({'error': 'Message cannot be empty'}), 400
 
-        # Check server connectivity
-        add_message('SYSTEM', 'Checking server connectivity...', 'system')
-
-        servers_online = True
-        for server_name in ['alice', 'eve', 'bob']:
-            if not check_server_status(server_name):
-                add_message('SYSTEM', f'{server_name.upper()} server is offline', 'error')
-                servers_online = False
-            else:
-                add_message('SYSTEM', f'{server_name.upper()} server is online', 'success')
-
-        if not servers_online:
-            return jsonify({
-                'error': 'One or more servers are offline. Please start Alice, Bob, and Eve servers.'
-            }), 400
-
-        # Send configuration to Alice server
+        # Add message to log
         add_message('SYSTEM', f'Starting QKD protocol with {num_qubits} qubits', 'system')
+        add_message('SYSTEM', f'Message: {message}', 'system')
+        add_message('SYSTEM', f'Eve enabled: {eve_enabled}', 'system')
 
-        config_data = {
-            'command': 'run_qkd',
-            'num_qubits': num_qubits,
-            'message': message,
-            'eve_enabled': eve_enabled
-        }
-
-        result = send_to_server('alice', config_data)
-
-        if result is None:
-            return jsonify({'error': 'Failed to communicate with Alice server'}), 500
-
+        # Execute QKD protocol in-process
+        add_message('SYSTEM', 'Executing BB84 protocol...', 'system')
+        result = run_qkd(num_qubits=num_qubits, message=message, eve_enabled=eve_enabled)
+        
         # Add final results to message log
         add_message('SYSTEM', f'QKD Protocol completed: {result["status"]}', 'success' if result['secure'] else 'warning')
+        add_message('SYSTEM', f'QBER: {result["qber"]*100:.2f}%', 'success' if result['secure'] else 'warning')
+        add_message('SYSTEM', f'Sifted key length: {result["sift_count"]} bits', 'info')
 
         # Prepare response summary (trim large arrays for JSON)
         summary = {
@@ -281,6 +348,8 @@ def api_run_qkd() -> Tuple[Dict, int]:
     except Exception as e:
         # Log unexpected errors and return generic message
         add_message('SYSTEM', f'Unexpected error: {str(e)}', 'error')
+        import traceback
+        traceback.print_exc()
         return jsonify({
             'error': f'Server error: {str(e)}'
         }), 500
