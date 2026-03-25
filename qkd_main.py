@@ -2,7 +2,7 @@
 QKD Orchestrator Module
 
 This module coordinates the complete BB84 Quantum Key Distribution protocol,
-tying together all 6 components into a single, cohesive simulation.
+tying together all components into a single, cohesive simulation.
 
 Protocol Pipeline:
     1. Alice → Generates random qubits and bases
@@ -12,15 +12,17 @@ Protocol Pipeline:
     5. Sift → Both compare bases publicly, keep matching bits
     6. QBER → Calculate error rate, detect eavesdropping
     7. Encrypt → Use shared key to encrypt/decrypt message
+    8. Privacy Amplification → Compress key & extract randomness using universal hashing
 
 BB84 Security Properties:
     - Information-theoretic security: Proven secure against quantum computers
     - Eavesdropping detection: Eve's presence raises QBER from 0% to ~25%
     - Key generation rate: ~50% of transmitted qubits become usable key
+    - Privacy amplification: Reduces information leakage via Toeplitz hashing
     - No pre-shared secrets: Key is generated from scratch each session
 
 Expected Results:
-    - Clean channel (no Eve): QBER ≈ 0%, ~N/2 bits in sifted key
+    - Clean channel (no Eve): QBER ≈ 0%, ~N/2 bits in sifted key, ~N/4 in final key
     - With Eve: QBER ≈ 25%, elevated error rate easily detected
 """
 
@@ -31,6 +33,7 @@ from alice import alice_prepare
 from quantum_channel import quantum_channel_transmit
 from bob import bob_measure, sift_key
 from security import secure_communication, calculate_qber
+from privacy_amplification import amplify_qkd_key, PrivacyAmplificationConfig
 
 
 def run_qkd(num_qubits: int = 100,
@@ -67,6 +70,8 @@ def run_qkd(num_qubits: int = 100,
             - Sifting results: alice_sifted, bob_sifted, sift_count, matching_idx
             - Security metrics: qber, errors, total, secure, status
             - Encryption results: key_hex, encrypted, decrypted
+            - Privacy amplification: amplified_key, amplified_key_length, 
+              privacy_amplification_metadata
             
     Raises:
         ValueError: If num_qubits is out of valid range
@@ -168,6 +173,31 @@ def run_qkd(num_qubits: int = 100,
         print(f"    Ciphertext: {result['encrypted'][:40]}...")
         print(f"    Plaintext: {result['decrypted']}")
     print()
+
+    # ── Step 6: Privacy Amplification ────────────────────────────────────────
+    print("[6] PRIVACY AMPLIFICATION — Key Compression & Randomness Extraction")
+    print("-" * 70)
+    # Convert list of bits to binary string for privacy amplification
+    sifted_key_str = ''.join(str(bit) for bit in sift['alice_sifted'])
+    
+    privacy_result = amplify_qkd_key(
+        sifted_key=sifted_key_str,
+        qber=result['qber'],
+        security_parameter=128,
+        compression_ratio=None  # Auto-compute from QBER
+    )
+    
+    amplified_key, pa_metadata = privacy_result
+    print(f"    Input key length:  {len(sift['alice_sifted'])} bits")
+    print(f"    Output key length: {len(amplified_key)} bits")
+    print(f"    Compression ratio: {pa_metadata.get('compression_ratio', 0)*100:.1f}%")
+    print(f"    Method: {pa_metadata.get('method', 'unknown')}")
+    # Handle both string and bytes returns from privacy amplification
+    if isinstance(amplified_key, bytes):
+        print(f"    Final key (hex):   {amplified_key.hex()[:40]}...")
+    else:
+        print(f"    Final key (binary):   {amplified_key[:40]}...")
+    print()
     print("=" * 70)
     print()
 
@@ -197,7 +227,12 @@ def run_qkd(num_qubits: int = 100,
         'matching_idx': sift['matching_idx'],
         
         # Security and encryption results
-        **result
+        **result,
+        
+        # Privacy amplification results
+        'amplified_key': amplified_key.hex() if isinstance(amplified_key, bytes) else amplified_key,
+        'amplified_key_length': pa_metadata.get('output_length', len(amplified_key)),
+        'privacy_amplification_metadata': pa_metadata
     }
 
 

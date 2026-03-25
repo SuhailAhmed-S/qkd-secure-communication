@@ -3,39 +3,621 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>QKD BB84 Documentation - Quantum Key Distribution Protocol</title>
+    <title>Documentation - Quantum Cipher QKD Protocol</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;600&family=Poppins:wght@600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
     <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; }
+        .docs-section {
+            position: relative;
+            z-index: 10;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        .docs-title {
+            font-family: var(--font-display);
+            font-size: 2.5rem;
+            font-weight: 800;
+            margin-bottom: 1rem;
+            color: var(--color-text);
+        }
+
+        .docs-subtitle {
+            font-size: 1.2rem;
+            color: var(--color-text-dim);
+            margin-bottom: 3rem;
+        }
+
+        .docs-container {
+            display: grid;
+            grid-template-columns: 250px 1fr;
+            gap: 3rem;
+        }
+
+        .docs-nav {
+            position: sticky;
+            top: 100px;
+            height: fit-content;
+            background: rgba(26, 31, 58, 0.6);
+            border: 1px solid var(--color-border);
+            border-radius: 12px;
+            padding: 1.5rem;
+            backdrop-filter: blur(10px);
+        }
+
+        .docs-nav h3 {
+            color: var(--color-accent-cyan);
+            margin-bottom: 1rem;
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .docs-nav ul {
+            list-style: none;
+        }
+
+        .docs-nav li {
+            margin-bottom: 0.5rem;
+        }
+
+        .docs-nav a {
+            display: block;
+            padding: 0.6rem 0.8rem;
+            color: var(--color-text-dim);
+            text-decoration: none;
+            border-left: 2px solid transparent;
+            transition: all var(--transition-smooth);
+            font-size: 0.9rem;
+        }
+
+        .docs-nav a:hover,
+        .docs-nav a.active {
+            color: var(--color-accent-cyan);
+            border-left-color: var(--color-accent-cyan);
+            background: rgba(0, 217, 255, 0.1);
+        }
+
+        .docs-content {
+            background: rgba(26, 31, 58, 0.6);
+            border: 1px solid var(--color-border);
+            border-radius: 12px;
+            padding: 2.5rem;
+            backdrop-filter: blur(10px);
+        }
+
+        .doc-section {
+            margin-bottom: 3rem;
+            scroll-margin-top: 120px;
+        }
+
+        .doc-section:last-child {
+            margin-bottom: 0;
+        }
+
+        .doc-section h2 {
+            color: var(--color-accent-cyan);
+            font-size: 1.8rem;
+            margin-bottom: 1rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 2px solid var(--color-border);
+        }
+
+        .doc-section h3 {
+            color: var(--color-accent-violet);
+            font-size: 1.3rem;
+            margin-top: 1.5rem;
+            margin-bottom: 0.8rem;
+        }
+
+        .doc-section p {
+            color: var(--color-text);
+            line-height: 1.8;
+            margin-bottom: 1rem;
+        }
+
+        .code-block {
+            background: rgba(10, 14, 39, 0.8);
+            border: 1px solid var(--color-border);
+            border-radius: 8px;
+            padding: 1.5rem;
+            margin: 1.5rem 0;
+            overflow-x: auto;
+            font-family: var(--font-mono);
+            font-size: 0.9rem;
+            line-height: 1.6;
+            color: #00ff88;
+        }
+
+        .code-block code {
+            display: block;
+            color: #00ff88;
+        }
+
+        .info-box {
+            background: rgba(0, 217, 255, 0.1);
+            border-left: 4px solid var(--color-accent-cyan);
+            padding: 1.5rem;
+            border-radius: 8px;
+            margin: 1.5rem 0;
+            color: var(--color-text);
+        }
+
+        .warning-box {
+            background: rgba(255, 170, 0, 0.1);
+            border-left: 4px solid #ffaa00;
+            padding: 1.5rem;
+            border-radius: 8px;
+            margin: 1.5rem 0;
+            color: var(--color-text);
+        }
+
+        .success-box {
+            background: rgba(0, 255, 136, 0.1);
+            border-left: 4px solid #00ff88;
+            padding: 1.5rem;
+            border-radius: 8px;
+            margin: 1.5rem 0;
+            color: var(--color-text);
+        }
+
+        .feature-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1.5rem;
+            margin: 2rem 0;
+        }
+
+        .feature-card {
+            background: rgba(10, 14, 39, 0.6);
+            border: 1px solid var(--color-border);
+            padding: 1.5rem;
+            border-radius: 8px;
+            transition: all var(--transition-smooth);
+        }
+
+        .feature-card:hover {
+            border-color: var(--color-accent-cyan);
+            box-shadow: 0 0 20px rgba(0, 217, 255, 0.2);
+        }
+
+        .feature-card h4 {
+            color: var(--color-accent-cyan);
+            margin-bottom: 0.8rem;
+        }
+
+        .step-list {
+            list-style: none;
+            counter-reset: step;
+            margin: 1.5rem 0;
+        }
+
+        .step-list li {
+            counter-increment: step;
+            margin-bottom: 1.5rem;
+            padding-left: 3rem;
+            position: relative;
+            line-height: 1.8;
+            color: var(--color-text);
+        }
+
+        .step-list li::before {
+            content: counter(step);
+            position: absolute;
+            left: 0;
+            top: 0;
+            background: var(--color-accent-cyan);
+            color: var(--color-bg-dark);
+            width: 2.5rem;
+            height: 2.5rem;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 600;
+            font-family: var(--font-display);
+        }
+
+        .protocol-diagram {
+            background: rgba(10, 14, 39, 0.8);
+            border: 1px solid var(--color-border);
+            padding: 2rem;
+            border-radius: 8px;
+            margin: 2rem 0;
+            text-align: center;
+            color: var(--color-accent-cyan);
+            font-family: var(--font-mono);
+            font-size: 0.9rem;
+            line-height: 2;
+        }
+
+        .key-term {
+            background: rgba(0, 217, 255, 0.1);
+            border-left: 3px solid var(--color-accent-cyan);
+            padding: 0.5rem 0.8rem;
+            border-radius: 4px;
+            font-weight: 500;
+            display: inline-block;
+            margin: 0.2rem 0.2rem 0.2rem 0;
+        }
+
+        @media (max-width: 1000px) {
+            .docs-container {
+                grid-template-columns: 1fr;
+            }
+
+            .docs-nav {
+                position: relative;
+                top: auto;
+            }
+
+            .feature-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .docs-section {
+                padding: 1.5rem;
+            }
+
+            .docs-title {
+                font-size: 2rem;
+            }
+
+            .doc-section h2 {
+                font-size: 1.4rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="nav-brand">
+                <span class="brand-accent">◆</span>
+                <span class="brand-text">Quantum Cipher</span>
+            </div>
+            <ul class="nav-links">
+                <li><a href="/">Home</a></li>
+                <li><a href="/simulator">Simulator</a></li>
+                <li><a href="/documentation" class="active">Docs</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- Docs Background -->
+    <div style="position: fixed; top: 0; left: 0; right: 0; bottom: 0; z-index: 0; pointer-events: none;">
+        <div class="quantum-grid"></div>
+        <div class="particle-field"></div>
+    </div>
+
+    <!-- Documentation Section -->
+    <section class="docs-section">
+        <h1 class="docs-title">Documentation</h1>
+        <p class="docs-subtitle">Complete technical guide to the BB84 Quantum Key Distribution protocol with Privacy Amplification</p>
+
+        <div class="docs-container">
+            <!-- Navigation Sidebar -->
+            <nav class="docs-nav">
+                <h3>Contents</h3>
+                <ul>
+                    <li><a href="#overview" class="nav-link">Overview</a></li>
+                    <li><a href="#bb84" class="nav-link">BB84 Protocol</a></li>
+                    <li><a href="#qber" class="nav-link">QBER Analysis</a></li>
+                    <li><a href="#amplification" class="nav-link">Privacy Amplification</a></li>
+                    <li><a href="#implementation" class="nav-link">Implementation</a></li>
+                    <li><a href="#api" class="nav-link">API Reference</a></li>
+                    <li><a href="#security" class="nav-link">Security Analysis</a></li>
+                </ul>
+            </nav>
+
+            <!-- Content -->
+            <div class="docs-content">
+
+                <!-- Overview Section -->
+                <div id="overview" class="doc-section">
+                    <h2>Overview</h2>
+                    <p>Quantum Key Distribution (QKD) enables two parties to establish a mathematically secure cryptographic key using quantum mechanics. This implementation provides the BB84 protocol with integrated privacy amplification and real-time eavesdropper detection.</p>
+                    <div class="info-box">
+                        <strong>Key Concept:</strong> Unlike classical cryptography which relies on computational hardness, QKD security derives from the laws of physics. Any attempt to intercept quantum states fundamentally alters them, making eavesdropping detectable.
+                    </div>
+                </div>
+
+                <!-- BB84 Protocol -->
+                <div id="bb84" class="doc-section">
+                    <h2>BB84 Protocol</h2>
+                    <p>The BB84 protocol, proposed by Bennett and Brassard in 1984, is the most famous QKD protocol. It uses two bases (rectilinear and diagonal) to encode qubits.</p>
+
+                    <h3>Protocol Steps</h3>
+                    <ol class="step-list">
+                        <li><strong>Qubit Preparation:</strong> Alice randomly chooses a basis (rectilinear + or diagonal ×) and prepares qubits with polarization states 0 or 1</li>
+                        <li><strong>Quantum Channel:</strong> Alice sends qubits to Bob through a quantum channel (potentially monitored by Eve)</li>
+                        <li><strong>Eavesdropping (Eve):</strong> Optional: Eve intercepts and measures qubits, potentially introducing errors</li>
+                        <li><strong>Bob's Measurement:</strong> Bob randomly chooses bases and measures received qubits</li>
+                        <li><strong>Sifting:</strong> Alice and Bob publicly compare bases (not values) and keep only bits measured with matching bases</li>
+                        <li><strong>QBER Calculation:</strong> Both parties sample and check a subset of sifted bits to compute Quantum Bit Error Rate</li>
+                        <li><strong>Privacy Amplification:</strong> Apply universal hashing to reduce eavesdropper information from O(n) to O(λ⁻¹)</li>
+                        <li><strong>Encryption:</strong> Use the amplified key for symmetric encryption (XOR or other cipher)</li>
+                    </ol>
+
+                    <div class="protocol-diagram">
+                        Alice → [Qubits] → Quantum Channel → [Measurement] → Bob<br>
+                        ↓<br>
+                        Eve (Optional Eavesdropper)
+                    </div>
+
+                    <h3>Basis Encoding</h3>
+                    <div class="feature-grid">
+                        <div class="feature-card">
+                            <h4>Rectilinear Basis (+)</h4>
+                            <p><code>|0⟩ = Horizontal (0°)</code></p>
+                            <p><code>|1⟩ = Vertical (90°)</code></p>
+                        </div>
+                        <div class="feature-card">
+                            <h4>Diagonal Basis (×)</h4>
+                            <p><code>|0⟩ = Diagonal (-45°)</code></p>
+                            <p><code>|1⟩ = Anti-diagonal (45°)</code></p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- QBER Analysis -->
+                <div id="qber" class="doc-section">
+                    <h2>QBER Analysis</h2>
+                    <p>The Quantum Bit Error Rate (QBER) is the key security metric in QKD. It indicates whether eavesdropping is occurring.</p>
+
+                    <h3>QBER Thresholds</h3>
+                    <div class="code-block">
+                        <code>QBER = (Number of Errors in Sifted Key) / (Total Sifted Key Bits)</code>
+                    </div>
+
+                    <div class="feature-grid">
+                        <div class="feature-card">
+                            <h4>QBER &lt; 11%</h4>
+                            <p><span class="key-term">SECURE ✓</span></p>
+                            <p>No significant eavesdropping detected. Key is safe to use.</p>
+                        </div>
+                        <div class="feature-card">
+                            <h4>QBER = 11-25%</h4>
+                            <p><span class="key-term">SUSPICIOUS ⚠</span></p>
+                            <p>Indicates possible presence of Eve. Protocol continues cautiously.</p>
+                        </div>
+                        <div class="feature-card">
+                            <h4>QBER &gt; 25%</h4>
+                            <p><span class="key-term">COMPROMISED ✗</span></p>
+                            <p>Definite eavesdropping detected. Abort protocol and investigate.</p>
+                        </div>
+                        <div class="feature-card">
+                            <h4>QBER ≈ 25% (with Eve)</h4>
+                            <p><span class="key-term">EXPECTED WITH EVE</span></p>
+                            <p>Theoretical prediction when Eve eavesdrops without strategy.</p>
+                        </div>
+                    </div>
+
+                    <div class="warning-box">
+                        <strong>⚠ Security Note:</strong> QBER calculation uses a publicly announced subset of bits. These bits must be discarded from the final key, as Eve has seen their values.
+                    </div>
+                </div>
+
+                <!-- Privacy Amplification -->
+                <div id="amplification" class="doc-section">
+                    <h2>Privacy Amplification</h2>
+                    <p>Privacy amplification reduces the information Eve has gained about the final key through universal hashing and randomness extraction.</p>
+
+                    <h3>The Problem</h3>
+                    <p>Eve may have partial information about the sifted key even after QBER testing. With QBER ≈ 25% (Eve guesses wrong 25% of the time), Eve still knows ~75% of key bits. Privacy amplification extracts a smaller key on which Eve's advantage is negligible.</p>
+
+                    <h3>Universal Hashing (Toeplitz)</h3>
+                    <p>Uses Toeplitz matrices for ε-universal hashing with collision probability ≤ 2^(-λ):</p>
+                    <div class="code-block">
+                        <code>T = Random Toeplitz matrix (λ × n)<br>
+Amplified_Key = T · Key (modulo 2)</code>
+                    </div>
+
+                    <h3>SHA-256 Extraction</h3>
+                    <p>Alternative using counter-mode SHA-256 for cryptographic-strength randomness extraction:</p>
+                    <div class="code-block">
+                        <code>For i in range(λ/256):<br>
+&nbsp;&nbsp;block[i] = SHA256(key || counter=i)<br>
+Amplified_Key = Concatenate all blocks</code>
+                    </div>
+
+                    <h3>Compression Based on QBER</h3>
+                    <p>The amplification method adapts based on channel quality:</p>
+                    <div class="code-block">
+                        <code>0-2% QBER   → 66% compression (strong channel)<br>
+2-5% QBER   → 50% compression (good channel)<br>
+5-11% QBER  → 30% compression (weak channel)<br>
+>11% QBER   → Abort protocol</code>
+                    </div>
+
+                    <div class="success-box">
+                        <strong>✓ Security Guarantee:</strong> After amplification, Eve's advantage drops to at most 2^(-λ) where λ is the security parameter (default 128).
+                    </div>
+                </div>
+
+                <!-- Implementation -->
+                <div id="implementation" class="doc-section">
+                    <h2>Implementation</h2>
+
+                    <h3>Core Modules</h3>
+                    <div class="feature-grid">
+                        <div class="feature-card">
+                            <h4>quantum_channel.py</h4>
+                            <p>Simulates quantum transmission with optional Eve eavesdropping and random measurement errors.</p>
+                        </div>
+                        <div class="feature-card">
+                            <h4>security.py</h4>
+                            <p>QBER calculation and eavesdropping detection logic.</p>
+                        </div>
+                        <div class="feature-card">
+                            <h4>qkd_main.py</h4>
+                            <p>Protocol orchestration combining all 8 steps of BB84 with privacy amplification.</p>
+                        </div>
+                        <div class="feature-card">
+                            <h4>privacy_amplification.py</h4>
+                            <p>Universal hashing and SHA extraction for key amplification.</p>
+                        </div>
+                    </div>
+
+                    <h3>Running a Simulation</h3>
+                    <div class="code-block">
+                        <code>from qkd_main import run_bb84_protocol<br><br>
+result = run_bb84_protocol(<br>
+&nbsp;&nbsp;num_qubits=100,<br>
+&nbsp;&nbsp;eve_present=True,<br>
+&nbsp;&nbsp;message="Secret"<br>
+)<br><br>
+print(f"QBER: {result['qber']}")<br>
+print(f"Secure: {result['secure']}")<br>
+print(f"Final key length: {result['amplified_key_length']}")
+                        </code>
+                    </div>
+                </div>
+
+                <!-- API Reference -->
+                <div id="api" class="doc-section">
+                    <h2>API Reference</h2>
+
+                    <h3>/api/run_qkd</h3>
+                    <p><strong>Method:</strong> POST</p>
+                    <div class="code-block">
+                        <code>{<br>
+&nbsp;&nbsp;"num_qubits": 100,<br>
+&nbsp;&nbsp;"message": "Hello",<br>
+&nbsp;&nbsp;"eve_enabled": false<br>
+}</code>
+                    </div>
+                    <p><strong>Response:</strong></p>
+                    <div class="code-block">
+                        <code>{<br>
+&nbsp;&nbsp;"qber": 0.05,<br>
+&nbsp;&nbsp;"secure": true,<br>
+&nbsp;&nbsp;"sift_count": 48,<br>
+&nbsp;&nbsp;"amplified_key_length": 24,<br>
+&nbsp;&nbsp;"encrypted": "a3f8d2...",<br>
+&nbsp;&nbsp;"decrypted": "Hello"<br>
+}</code>
+                    </div>
+
+                    <h3>/api/server_status</h3>
+                    <p><strong>Method:</strong> GET</p>
+                    <div class="code-block">
+                        <code>{<br>
+&nbsp;&nbsp;"alice": true,<br>
+&nbsp;&nbsp;"bob": true,<br>
+&nbsp;&nbsp;"eve": false<br>
+}</code>
+                    </div>
+                </div>
+
+                <!-- Security Analysis -->
+                <div id="security" class="doc-section">
+                    <h2>Security Analysis</h2>
+
+                    <h3>Information-Theoretic Security</h3>
+                    <p>BB84 provides <span class="key-term">unconditional security</span> against an eavesdropper with unlimited computational power. Security does not depend on hardness assumptions.</p>
+
+                    <h3>Quantum No-Cloning Theorem</h3>
+                    <p>Eve cannot clone unknown quantum states (no-cloning theorem). Any measurement attempt collapses the state, causing detectable errors in exactly 50% of bases (when she guesses wrong).</p>
+
+                    <h3>Eavesdropper Detection</h3>
+                    <ul class="step-list">
+                        <li>Eve guesses the basis correctly 50% of the time</li>
+                        <li>When she guesses wrong, her measurement produces random results</li>
+                        <li>This causes bit errors in 50% of her wrong-basis measurements</li>
+                        <li>Overall: Eve introduces ~25% QBER if detected</li>
+                        <li>Protocol aborts when QBER &gt; 11%, detecting Eve with high confidence</li>
+                    </ul>
+
+                    <h3>Privacy Amplification Guarantee</h3>
+                    <p>Theorem (Vazirani-Widerson): After universal hashing by ε-universal family, Eve's Shannon entropy about the final key increases by log(1/ε). With ε ≤ 2^(-128), Eve gains negligible advantage.</p>
+
+                    <div class="success-box">
+                        <strong>Conclusion:</strong> For 100-qubit basis agreement, ~50 sifted bits → ~25 amplified bits with 128-bit security parameter provides practical quantum-secure key exchange.
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <script src="{{ url_for('static', filename='script.js') }}"></script>
+    <script>
+        // Navigation link active state
+        document.querySelectorAll('.nav-link').forEach(link => {
+            link.addEventListener('click', function() {
+                document.querySelectorAll('.nav-link').forEach(l => l.classList.remove('active'));
+                this.classList.add('active');
+            });
+        });
+
+        // Highlight active section on scroll
+        window.addEventListener('scroll', () => {
+            let current = '';
+            document.querySelectorAll('.doc-section').forEach(section => {
+                const sectionTop = section.offsetTop - 150;
+                if (pageYOffset >= sectionTop) {
+                    current = section.getAttribute('id');
+                }
+            });
+
+            document.querySelectorAll('.nav-link').forEach(link => {
+                link.classList.remove('active');
+                if(link.getAttribute('href').slice(1) === current) {
+                    link.classList.add('active');
+                }
+            });
+        });
+    </script>
+</body>
+</html>
 
         :root {
-            --primary: #00d4ff;
-            --secondary: #7c3aed;
-            --success: #10b981;
-            --danger: #ef4444;
-            --warning: #f59e0b;
-            --bg: #0b0f1a;
-            --surface: #131929;
-            --card: #1a2238;
-            --border: #253050;
-            --text: #e2e8f0;
-            --muted: #94a3b8;
+            --quantum-primary: #00ff88;
+            --quantum-secondary: #00ccff;
+            --quantum-accent: #ff00ff;
+            --quantum-dark: #0a0e27;
+            --quantum-surface: #0f1a3a;
+            --quantum-card: #141e3e;
+            --quantum-border: #1a3a5c;
+            --quantum-text: #e0f2ff;
+            --quantum-muted: #6b8fb8;
+            --success: #00ff88;
+            --danger: #ff0055;
+            --warning: #ffaa00;
+            --primary: var(--quantum-primary);
+            --secondary: var(--quantum-secondary);
+            --bg: var(--quantum-dark);
+            --surface: var(--quantum-surface);
+            --card: var(--quantum-card);
+            --border: var(--quantum-border);
+            --text: var(--quantum-text);
+            --muted: var(--quantum-muted);
         }
 
         body {
-            font-family: 'Segoe UI', system-ui, sans-serif;
+            font-family: 'JetBrains Mono', 'Courier New', monospace;
             background: var(--bg);
+            background-image: 
+                radial-gradient(circle at 20% 50%, rgba(0, 255, 136, 0.05) 0%, transparent 50%),
+                radial-gradient(circle at 80% 80%, rgba(0, 204, 255, 0.05) 0%, transparent 50%);
             color: var(--text);
             line-height: 1.6;
         }
 
         header {
-            background: linear-gradient(135deg, rgba(0, 212, 255, 0.1), rgba(124, 58, 237, 0.1));
-            border-bottom: 2px solid var(--border);
+            background: linear-gradient(135deg, rgba(10, 14, 39, 0.95), rgba(15, 26, 58, 0.95));
+            border-bottom: 3px solid var(--quantum-primary);
             padding: 1rem 2rem;
             position: sticky;
             top: 0;
             z-index: 100;
-            backdrop-filter: blur(10px);
+            backdrop-filter: blur(20px);
+            box-shadow: 0 8px 32px rgba(0, 255, 136, 0.1);
         }
 
         nav {

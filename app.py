@@ -332,6 +332,25 @@ def api_run_qkd() -> Tuple[Dict, int]:
             'key_hex': result['key_hex'],
             'encrypted': result['encrypted'],
             'decrypted': result['decrypted'],
+            
+            # AMPLIFIED KEY INFORMATION
+            'amplified_key': result.get('amplified_key', ''),
+            'amplified_key_length': result.get('amplified_key_length', 0),
+            
+            # SIFT DATA FOR MEASUREMENTS TABLE
+            'sift': {
+                'alice_qubits': result.get('alice_bits', []),
+                'alice_bases': result.get('alice_bases', []),
+                'bob_bases': result.get('bob_bases', []),
+                'bob_measurements': result.get('bob_bits', []),
+                'alice_sifted': result.get('alice_sifted', []),
+                'bob_sifted': result.get('bob_sifted', []),
+                'matching_idx': result.get('matching_idx', [])
+            },
+            
+            'sift_key_bits': result.get('alice_sifted', []),
+            'sift_matches': len(result.get('matching_idx', [])),
+            
             # Include first N items for visualization
             'alice_bits_preview': result['alice_bits'][:PREVIEW_LENGTH],
             'alice_bases_preview': result['alice_bases'][:PREVIEW_LENGTH],

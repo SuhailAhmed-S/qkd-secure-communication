@@ -3,737 +3,961 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>QKD BB84 - Secure Communication Using Quantum Key Distribution</title>
-    <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; }
+    <title>Quantum Cipher - Secure Communication Through Quantum Physics</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;600&family=Poppins:wght@600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="nav-brand">
+                <span class="brand-accent">◆</span>
+                <span class="brand-text">Quantum Cipher</span>
+            </div>
+            <ul class="nav-links">
+                <li><a href="#about">About</a></li>
+                <li><a href="#features">Features</a></li>
+                <li><a href="/simulator">Simulator</a></li>
+                <li><a href="/documentation">Docs</a></li>
+            </ul>
+        </div>
+    </nav>
 
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="hero-background">
+            <div class="quantum-grid"></div>
+            <div class="particle-field"></div>
+            <div class="glow-orb orb-1"></div>
+            <div class="glow-orb orb-2"></div>
+        </div>
+        
+        <div class="hero-content">
+            <div class="hero-text">
+                <h1 class="hero-title">Security Through <span class="quantum-text">Quantum Entanglement</span></h1>
+                <p class="hero-subtitle">Unbreakable encryption powered by the laws of quantum mechanics. Detect eavesdropping in real-time. Transmit secrets that only legitimate recipients can decode.</p>
+                <div class="hero-cta">
+                    <button class="btn btn-primary" onclick="window.location.href='/simulator'">Run Simulator</button>
+                    <button class="btn btn-secondary" onclick="window.location.href='/documentation'">Learn More</button>
+                </div>
+            </div>
+            
+            <div class="hero-visual">
+                <svg viewBox="0 0 200 200" class="quantum-visual">
+                    <defs>
+                        <filter id="glow">
+                            <feGaussianBlur stdDeviation="2" result="coloredBlur"/>
+                            <feMerge>
+                                <feMergeNode in="coloredBlur"/>
+                                <feMergeNode in="SourceGraphic"/>
+                            </feMerge>
+                        </filter>
+                    </defs>
+                    
+                    <!-- Entangled particles -->
+                    <circle cx="100" cy="100" r="80" fill="none" stroke="url(#ring-gradient)" stroke-width="1" opacity="0.3"/>
+                    <circle cx="100" cy="100" r="60" fill="none" stroke="url(#ring-gradient)" stroke-width="1" opacity="0.4"/>
+                    <circle cx="100" cy="100" r="40" fill="none" stroke="url(#ring-gradient)" stroke-width="1" opacity="0.5"/>
+                    
+                    <!-- Particle positions -->
+                    <circle cx="100" cy="40" r="4" fill="#00d9ff" filter="url(#glow)" class="particle particle-1"/>
+                    <circle cx="160" cy="80" r="4" fill="#00d9ff" filter="url(#glow)" class="particle particle-2"/>
+                    <circle cx="140" cy="140" r="4" fill="#00d9ff" filter="url(#glow)" class="particle particle-3"/>
+                    <circle cx="60" cy="140" r="4" fill="#00d9ff" filter="url(#glow)" class="particle particle-4"/>
+                    <circle cx="40" cy="80" r="4" fill="#00d9ff" filter="url(#glow)" class="particle particle-5"/>
+                    <circle cx="100" cy="100" r="3" fill="#da00ff" filter="url(#glow)" class="particle center-particle"/>
+                    
+                    <!-- Connection lines -->
+                    <line x1="100" y1="40" x2="100" y2="100" stroke="url(#line-gradient)" stroke-width="1" opacity="0.4" class="connection-line"/>
+                    <line x1="160" y1="80" x2="100" y2="100" stroke="url(#line-gradient)" stroke-width="1" opacity="0.4" class="connection-line"/>
+                    <line x1="140" y1="140" x2="100" y2="100" stroke="url(#line-gradient)" stroke-width="1" opacity="0.4" class="connection-line"/>
+                    <line x1="60" y1="140" x2="100" y2="100" stroke="url(#line-gradient)" stroke-width="1" opacity="0.4" class="connection-line"/>
+                    <line x1="40" y1="80" x2="100" y2="100" stroke="url(#line-gradient)" stroke-width="1" opacity="0.4" class="connection-line"/>
+                    
+                    <defs>
+                        <linearGradient id="ring-gradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                            <stop offset="0%" style="stop-color:#00d9ff;stop-opacity:0.6" />
+                            <stop offset="100%" style="stop-color:#da00ff;stop-opacity:0.6" />
+                        </linearGradient>
+                        <linearGradient id="line-gradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                            <stop offset="0%" style="stop-color:#00d9ff;stop-opacity:0.8" />
+                            <stop offset="100%" style="stop-color:#da00ff;stop-opacity:0.8" />
+                        </linearGradient>
+                    </defs>
+                </svg>
+            </div>
+        </div>
+    </section>
+
+    <!-- About Section -->
+    <section class="about" id="about">
+        <div class="section-header">
+            <h2>The Quantum Advantage</h2>
+            <div class="header-underline"></div>
+        </div>
+        
+        <div class="about-grid">
+            <article class="about-card card-large">
+                <div class="card-accent accent-cyan"></div>
+                <h3>What is Quantum Key Distribution?</h3>
+                <p>QKD leverages quantum mechanics to distribute encryption keys with proven information-theoretic security. Unlike classical cryptography, which relies on computational hardness, QKD is unbreakable by principle—any eavesdropping attempt introduces detectable errors.</p>
+                <p>Our BB84 implementation demonstrates this revolutionary approach with real-time eavesdropping detection and privacy amplification.</p>
+            </article>
+            
+            <article class="about-card card-medium">
+                <div class="card-accent accent-violet"></div>
+                <h3>Eavesdropping Detection</h3>
+                <p>The quantum channel betrays any unauthorized access. When Eve intercepts qubits, she introduces measurement errors that reveal her presence through elevated QBER (Quantum Bit Error Rate).</p>
+            </article>
+            
+            <article class="about-card card-small">
+                <div class="card-accent accent-cyan"></div>
+                <h3>Future-Proof</h3>
+                <p>Quantum-resistant from day one. Would remain secure even against quantum computers.</p>
+            </article>
+        </div>
+    </section>
+
+    <!-- Features Section -->
+    <section class="features" id="features">
+        <div class="section-header">
+            <h2>Core Capabilities</h2>
+            <div class="header-underline"></div>
+        </div>
+        
+        <div class="features-container">
+            <!-- Feature 1 -->
+            <article class="feature feature-1">
+                <div class="feature-number">01</div>
+                <div class="feature-visual">
+                    <div class="quantum-circuit">
+                        <div class="circuit-line circuit-h"></div>
+                        <div class="circuit-line circuit-v"></div>
+                        <div class="circuit-node"></div>
+                    </div>
+                </div>
+                <h3>BB84 Protocol</h3>
+                <p>Secure key distribution through quantum basis reconciliation. Alice encodes qubits, Bob measures them, and together they sift a shared secret key.</p>
+                <div class="feature-tag">Core Protocol</div>
+            </article>
+            
+            <!-- Feature 2 -->
+            <article class="feature feature-2">
+                <div class="feature-number">02</div>
+                <div class="feature-visual">
+                    <div class="quantum-circuit">
+                        <div class="circuit-line circuit-h"></div>
+                        <div class="circuit-node"></div>
+                    </div>
+                </div>
+                <h3>Privacy Amplification</h3>
+                <p>Toeplitz universal hashing with SHA-3 extraction. Compresses and randomizes the key to eliminate partial information leakage.</p>
+                <div class="feature-tag">Security</div>
+            </article>
+            
+            <!-- Feature 3 -->
+            <article class="feature feature-3">
+                <div class="feature-number">03</div>
+                <div class="feature-visual">
+                    <div class="error-animation">
+                        <div class="error-particle"></div>
+                        <div class="error-particle"></div>
+                        <div class="error-particle"></div>
+                        <div class="error-particle"></div>
+                    </div>
+                </div>
+                <h3>Error Correction</h3>
+                <p>Handles quantum noise and implementation imperfections. Ensures reliable key derivation even in real-world noisy channels.</p>
+                <div class="feature-tag">Reliability</div>
+            </article>
+            
+            <!-- Feature 4 -->
+            <article class="feature feature-4">
+                <div class="feature-number">04</div>
+                <div class="feature-visual">
+                    <div class="privacy-waves">
+                        <div class="wave wave-1"></div>
+                        <div class="wave wave-2"></div>
+                        <div class="wave wave-3"></div>
+                    </div>
+                </div>
+                <h3>Real-Time Detection</h3>
+                <p>QBER monitoring quantifies the quantum bit error rate. Thresholds automatically detect attacks and trigger abort protocols.</p>
+                <div class="feature-tag">Protection</div>
+            </article>
+        </div>
+    </section>
+
+    <!-- Stats Section -->
+    <section class="stats">
+        <div class="stats-grid">
+            <div class="stat-item">
+                <div class="stat-number">100%</div>
+                <div class="stat-label">Information-Theoretic Security</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-number">25%</div>
+                <div class="stat-label">QBER with Eavesdropping</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-number">11%</div>
+                <div class="stat-label">Detection Threshold</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-number">O(n)</div>
+                <div class="stat-label">Protocol Complexity</div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Research Lab Section -->
+    <section class="research-lab">
+        <div class="lab-content">
+            <h2>Built for Research & Discovery</h2>
+            <p>This implementation combines educational clarity with production-ready code. Study the protocol, run simulations, detect eavesdropping in real-time, and understand why quantum mechanics guarantees security.</p>
+            
+            <div class="features-inline">
+                <div class="inline-item">
+                    <span class="inline-icon">◊</span>
+                    <span>Interactive Simulator</span>
+                </div>
+                <div class="inline-item">
+                    <span class="inline-icon">◊</span>
+                    <span>Comprehensive Tests</span>
+                </div>
+                <div class="inline-item">
+                    <span class="inline-icon">◊</span>
+                    <span>Privacy Amplification</span>
+                </div>
+                <div class="inline-item">
+                    <span class="inline-icon">◊</span>
+                    <span>Attack Simulation</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="footer-content">
+            <div class="footer-section">
+                <h4>Quantum Cipher</h4>
+                <p>Secure communication through quantum physics.</p>
+            </div>
+            
+            <div class="footer-section">
+                <h4>Protocol</h4>
+                <ul>
+                    <li><a href="/simulator">Simulator</a></li>
+                    <li><a href="/documentation">Documentation</a></li>
+                </ul>
+            </div>
+            
+            <div class="footer-section">
+                <h4>Resources</h4>
+                <ul>
+                    <li><a href="#">Research Papers</a></li>
+                    <li><a href="#">GitHub</a></li>
+                </ul>
+            </div>
+        </div>
+        
+        <div class="footer-divider"></div>
+        
+        <div class="footer-bottom">
+            <p>&copy; 2026 Quantum Cipher. Information-theoretically secure.</p>
+            <div class="footer-glow"></div>
+        </div>
+    </footer>
+
+    <script src="{{ url_for('static', filename='script.js') }}"></script>
+</body>
+</html>
         :root {
-            --primary: #00d4ff;
-            --secondary: #7c3aed;
-            --success: #10b981;
-            --danger: #ef4444;
-            --warning: #f59e0b;
-            --bg: #0b0f1a;
-            --surface: #131929;
-            --card: #1a2238;
-            --border: #253050;
-            --text: #e2e8f0;
-            --muted: #94a3b8;
+            --color-bg-dark: #0a0e27;
+            --color-bg-darker: #050810;
+            --color-surface: #1a1f3a;
+            --color-text: #e8eaf6;
+            --color-text-dim: #a0aec0;
+            --color-accent-cyan: #00d9ff;
+            --color-accent-violet: #da00ff;
+            --color-accent-blue: #0099ff;
+            --color-accent-pink: #ff00ff;
+            --color-border: rgba(0, 217, 255, 0.1);
+            --color-glow-cyan: rgba(0, 217, 255, 0.3);
+            --color-glow-violet: rgba(218, 0, 255, 0.3);
         }
 
         body {
-            font-family: 'Segoe UI', system-ui, sans-serif;
-            background: var(--bg);
-            color: var(--text);
+            font-family: 'JetBrains Mono', 'Courier New', monospace;
+            background: var(--quantum-dark);
+            background-image: 
+                radial-gradient(circle at 20% 50%, rgba(0, 255, 136, 0.05) 0%, transparent 50%),
+                radial-gradient(circle at 80% 80%, rgba(0, 204, 255, 0.05) 0%, transparent 50%);
+            color: var(--quantum-text);
             line-height: 1.6;
+            overflow-x: hidden;
+            position: relative;
+        }
+
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: 
+                radial-gradient(circle at 15% 25%, rgba(0, 255, 136, 0.1) 0%, transparent 25%),
+                radial-gradient(circle at 85% 75%, rgba(0, 204, 255, 0.1) 0%, transparent 25%);
+            animation: quantumPulse 6s ease-in-out infinite;
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        @keyframes quantumPulse {
+            0%, 100% { opacity: 0.5; }
+            50% { opacity: 1; }
+        }
+
+        @keyframes quantumOrbit {
+            0% { transform: rotate(0deg) translate(0, 0); }
+            100% { transform: rotate(360deg) translate(0, 0); }
+        }
+
+        @keyframes quantumSpin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
         }
 
         header {
-            background: linear-gradient(135deg, rgba(0, 212, 255, 0.1), rgba(124, 58, 237, 0.1));
-            border-bottom: 2px solid var(--border);
+            background: linear-gradient(135deg, rgba(10, 14, 39, 0.95), rgba(15, 26, 58, 0.95));
+            border-bottom: 3px solid var(--quantum-primary);
             padding: 1rem 2rem;
             position: sticky;
             top: 0;
             z-index: 100;
-            backdrop-filter: blur(10px);
+            backdrop-filter: blur(20px);
+            box-shadow: 0 8px 32px rgba(0, 255, 136, 0.1);
         }
 
         nav {
-            max-width: 1200px;
+            max-width: 1400px;
             margin: 0 auto;
             display: flex;
             justify-content: space-between;
             align-items: center;
+            position: relative;
+            z-index: 1;
         }
 
         .logo {
-            font-size: 1.5rem;
-            font-weight: 700;
-            color: var(--primary);
+            font-size: 1.8rem;
+            font-weight: 900;
             display: flex;
             align-items: center;
-            gap: 0.5rem;
+            gap: 0.7rem;
+            background: linear-gradient(135deg, var(--quantum-primary), var(--quantum-secondary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            letter-spacing: 2px;
+        }
+
+        .logo::before {
+            content: '⚛';
+            font-size: 2rem;
+            margin-right: 0.3rem;
         }
 
         .nav-links {
             display: flex;
-            gap: 2rem;
+            gap: 3rem;
             list-style: none;
         }
 
         .nav-links a {
-            color: var(--text);
+            color: var(--quantum-text);
             text-decoration: none;
-            transition: color 0.3s;
-            font-weight: 500;
+            transition: all 0.3s;
+            font-weight: 600;
+            letter-spacing: 1px;
+            position: relative;
+            padding-bottom: 0.5rem;
         }
 
-        .nav-links a:hover, .nav-links a.active {
-            color: var(--primary);
+        .nav-links a::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: linear-gradient(90deg, var(--quantum-primary), var(--quantum-secondary));
+            transition: width 0.3s;
+        }
+
+        .nav-links a:hover::after,
+        .nav-links a.active::after {
+            width: 100%;
+        }
+
+        .nav-links a:hover {
+            color: var(--quantum-primary);
+            text-shadow: 0 0 15px rgba(0, 255, 136, 0.5);
         }
 
         .container {
-            max-width: 1200px;
+            max-width: 1400px;
             margin: 0 auto;
-            padding: 2rem;
+            padding: 3rem 2rem;
+            position: relative;
+            z-index: 1;
         }
 
         .hero {
             text-align: center;
-            padding: 4rem 2rem;
-            background: linear-gradient(135deg, rgba(0, 212, 255, 0.05), rgba(124, 58, 237, 0.05));
-            border-radius: 12px;
-            margin-bottom: 4rem;
-            border: 1px solid var(--border);
+            padding: 6rem 3rem;
+            background: linear-gradient(135deg, 
+                rgba(0, 255, 136, 0.08), 
+                rgba(0, 204, 255, 0.08),
+                rgba(255, 0, 255, 0.03));
+            border-radius: 20px;
+            margin-bottom: 5rem;
+            border: 2px solid var(--quantum-border);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(0, 255, 136, 0.1) 0%, transparent 70%);
+            animation: quantumOrbit 20s linear infinite;
+            pointer-events: none;
         }
 
         .hero h1 {
-            font-size: 3rem;
+            font-size: 3.5rem;
             margin-bottom: 1rem;
-            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            background: linear-gradient(135deg, var(--quantum-primary), var(--quantum-secondary), var(--quantum-accent));
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             background-clip: text;
+            font-weight: 900;
+            letter-spacing: 2px;
+            position: relative;
+            z-index: 1;
         }
 
         .hero .subtitle {
-            font-size: 1.3rem;
-            color: var(--muted);
-            margin-bottom: 2rem;
+            font-size: 1.4rem;
+            color: var(--quantum-secondary);
+            margin-bottom: 1.5rem;
+            font-weight: 300;
+            letter-spacing: 1px;
+            position: relative;
+            z-index: 1;
         }
 
         .hero .description {
             font-size: 1.1rem;
-            color: var(--text);
+            color: var(--quantum-text);
             max-width: 800px;
-            margin: 0 auto 2rem;
+            margin: 0 auto 3rem;
             line-height: 1.8;
+            position: relative;
+            z-index: 1;
         }
 
         .cta-buttons {
             display: flex;
-            gap: 1rem;
+            gap: 1.5rem;
             justify-content: center;
             flex-wrap: wrap;
+            position: relative;
+            z-index: 1;
         }
 
         .btn {
-            padding: 0.75rem 2rem;
+            padding: 1rem 2.5rem;
             border: none;
-            border-radius: 6px;
+            border-radius: 50px;
             font-weight: 700;
             cursor: pointer;
-            transition: all 0.3s;
+            transition: all 0.4s;
             font-size: 1rem;
             text-decoration: none;
             display: inline-block;
+            position: relative;
+            overflow: hidden;
+            letter-spacing: 1px;
+        }
+
+        .btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+            transition: left 0.5s;
+        }
+
+        .btn:hover::before {
+            left: 100%;
         }
 
         .btn-primary {
-            background: linear-gradient(135deg, var(--primary), var(--secondary));
-            color: white;
+            background: linear-gradient(135deg, var(--quantum-primary), var(--quantum-secondary));
+            color: var(--quantum-dark);
+            font-weight: 900;
+            box-shadow: 0 0 20px rgba(0, 255, 136, 0.4);
         }
 
         .btn-primary:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 10px 25px rgba(0, 212, 255, 0.3);
+            transform: translateY(-4px) scale(1.05);
+            box-shadow: 0 15px 40px rgba(0, 255, 136, 0.6), 0 0 40px rgba(0, 204, 255, 0.3);
         }
 
         .btn-secondary {
             background: transparent;
-            border: 2px solid var(--primary);
-            color: var(--primary);
+            border: 2px solid var(--quantum-primary);
+            color: var(--quantum-primary);
         }
 
         .btn-secondary:hover {
-            background: rgba(0, 212, 255, 0.1);
+            background: rgba(0, 255, 136, 0.15);
+            box-shadow: 0 0 20px rgba(0, 255, 136, 0.4);
+            transform: translateY(-4px);
         }
 
         .features {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
             gap: 2rem;
-            margin-bottom: 4rem;
+            margin-bottom: 5rem;
         }
 
         .feature-card {
-            background: var(--card);
-            border: 1px solid var(--border);
-            border-radius: 12px;
-            padding: 2rem;
-            transition: all 0.3s;
+            background: linear-gradient(135deg, var(--quantum-card), rgba(20, 30, 62, 0.5));
+            border: 2px solid var(--quantum-border);
+            border-radius: 15px;
+            padding: 2.5rem;
+            transition: all 0.4s;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .feature-card::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            right: -50%;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(circle, rgba(0, 255, 136, 0.1) 0%, transparent 70%);
+            transition: all 0.4s;
+            pointer-events: none;
         }
 
         .feature-card:hover {
-            border-color: var(--primary);
-            transform: translateY(-5px);
-            box-shadow: 0 10px 30px rgba(0, 212, 255, 0.1);
+            border-color: var(--quantum-primary);
+            transform: translateY(-10px) scale(1.02);
+            background: linear-gradient(135deg, rgba(0, 255, 136, 0.05), rgba(20, 30, 62, 0.8));
+            box-shadow: 0 20px 50px rgba(0, 255, 136, 0.2),
+                        inset 0 0 30px rgba(0, 255, 136, 0.05);
+        }
+
+        .feature-card:hover::before {
+            top: -20%;
+            right: -20%;
         }
 
         .feature-icon {
-            font-size: 2.5rem;
-            margin-bottom: 1rem;
+            font-size: 3rem;
+            margin-bottom: 1.5rem;
+            filter: drop-shadow(0 0 10px rgba(0, 255, 136, 0.5));
+            transition: transform 0.3s;
+        }
+
+        .feature-card:hover .feature-icon {
+            transform: scale(1.1) rotate(5deg);
         }
 
         .feature-title {
-            font-size: 1.3rem;
-            font-weight: 700;
-            margin-bottom: 0.5rem;
-            color: var(--primary);
+            font-size: 1.4rem;
+            font-weight: 800;
+            margin-bottom: 0.8rem;
+            color: var(--quantum-primary);
+            letter-spacing: 1px;
+            position: relative;
+            z-index: 1;
         }
 
         .feature-description {
-            color: var(--muted);
-            line-height: 1.6;
+            color: var(--quantum-muted);
+            line-height: 1.7;
+            position: relative;
+            z-index: 1;
         }
 
         .protocol-section {
-            background: var(--card);
-            border: 1px solid var(--border);
-            border-radius: 12px;
-            padding: 3rem;
-            margin-bottom: 4rem;
+            background: linear-gradient(135deg, rgba(20, 30, 62, 0.6), rgba(15, 26, 58, 0.4));
+            border: 2px solid var(--quantum-border);
+            border-radius: 20px;
+            padding: 4rem;
+            margin-bottom: 5rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .protocol-section::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: conic-gradient(from 0deg, rgba(0, 255, 136, 0.1), transparent 25%);
+            animation: quantumSpin 30s linear infinite;
+            pointer-events: none;
         }
 
         .section-title {
-            font-size: 2rem;
-            font-weight: 700;
-            margin-bottom: 2rem;
-            color: var(--primary);
+            font-size: 2.3rem;
+            font-weight: 900;
+            margin-bottom: 2.5rem;
+            color: var(--quantum-primary);
+            letter-spacing: 2px;
+            position: relative;
+            z-index: 1;
         }
 
         .protocol-steps {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
             gap: 2rem;
             margin-bottom: 2rem;
+            position: relative;
+            z-index: 1;
         }
 
         .step-card {
-            background: var(--surface);
-            border: 2px solid var(--border);
-            border-radius: 8px;
-            padding: 1.5rem;
+            background: linear-gradient(135deg, var(--quantum-surface), rgba(20, 30, 62, 0.3));
+            border: 2px dashed var(--quantum-border);
+            border-radius: 12px;
+            padding: 2rem;
             text-align: center;
-            transition: all 0.3s;
+            transition: all 0.4s;
+            position: relative;
         }
 
         .step-card:hover {
-            border-color: var(--primary);
-            background: rgba(0, 212, 255, 0.05);
+            border-style: solid;
+            border-color: var(--quantum-primary);
+            background: rgba(0, 255, 136, 0.05);
+            transform: translateY(-8px);
+            box-shadow: 0 15px 40px rgba(0, 255, 136, 0.2);
         }
 
         .step-number {
             display: inline-block;
-            width: 40px;
-            height: 40px;
-            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            width: 50px;
+            height: 50px;
+            background: linear-gradient(135deg, var(--quantum-primary), var(--quantum-secondary));
             border-radius: 50%;
-            line-height: 40px;
-            font-weight: 700;
+            line-height: 50px;
+            font-weight: 800;
             margin-bottom: 1rem;
+            box-shadow: 0 0 20px rgba(0, 255, 136, 0.4);
+            color: var(--quantum-dark);
+            font-size: 1.2rem;
         }
 
         .step-title {
-            font-size: 1.1rem;
-            font-weight: 700;
-            margin-bottom: 0.5rem;
+            font-size: 1.2rem;
+            font-weight: 800;
+            margin-bottom: 0.8rem;
+            color: var(--quantum-secondary);
+            letter-spacing: 1px;
         }
 
         .step-description {
-            color: var(--muted);
+            color: var(--quantum-muted);
             font-size: 0.95rem;
+            line-height: 1.6;
         }
 
         .metrics {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 1.5rem;
-            margin-top: 2rem;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 2rem;
+            margin-top: 3rem;
+            position: relative;
+            z-index: 1;
         }
 
         .metric {
-            background: var(--card);
-            border: 1px solid var(--border);
-            border-radius: 8px;
-            padding: 1.5rem;
+            background: linear-gradient(135deg, rgba(0, 255, 136, 0.05), rgba(0, 204, 255, 0.05));
+            border: 2px solid var(--quantum-border);
+            border-radius: 12px;
+            padding: 2rem;
             text-align: center;
+            transition: all 0.3s;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .metric:hover {
+            border-color: var(--quantum-primary);
+            transform: scale(1.05);
+            box-shadow: 0 0 30px rgba(0, 255, 136, 0.3);
         }
 
         .metric-value {
-            font-size: 2rem;
-            font-weight: 800;
-            color: var(--primary);
+            font-size: 2.5rem;
+            font-weight: 900;
+            background: linear-gradient(135deg, var(--quantum-primary), var(--quantum-secondary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
             margin-bottom: 0.5rem;
+            letter-spacing: 1px;
         }
 
         .metric-label {
-            color: var(--muted);
-            font-size: 0.9rem;
+            color: var(--quantum-muted);
+            font-size: 0.95rem;
+            letter-spacing: 1px;
         }
 
         .security-comparison {
-            background: var(--surface);
-            border: 1px solid var(--border);
-            border-radius: 8px;
-            padding: 2rem;
-            margin-top: 2rem;
+            background: linear-gradient(135deg, rgba(20, 30, 62, 0.4), rgba(15, 26, 58, 0.2));
+            border: 2px solid var(--quantum-border);
+            border-radius: 15px;
+            padding: 2.5rem;
+            margin-top: 3rem;
+            position: relative;
+            z-index: 1;
         }
 
         .comparison-table {
             width: 100%;
             border-collapse: collapse;
-            margin-top: 1rem;
+            margin-top: 1.5rem;
         }
 
         .comparison-table th,
         .comparison-table td {
-            padding: 1rem;
+            padding: 1.2rem;
             text-align: left;
-            border-bottom: 1px solid var(--border);
+            border-bottom: 1px solid var(--quantum-border);
         }
 
         .comparison-table th {
-            background: var(--card);
-            font-weight: 700;
-            color: var(--primary);
+            background: linear-gradient(135deg, var(--quantum-surface), rgba(20, 30, 62, 0.4));
+            font-weight: 800;
+            color: var(--quantum-primary);
+            letter-spacing: 1px;
         }
 
         .comparison-table tr:hover {
-            background: rgba(0, 212, 255, 0.05);
+            background: rgba(0, 255, 136, 0.05);
         }
 
-        .check { color: var(--success); font-weight: 700; }
-        .cross { color: var(--danger); font-weight: 700; }
-
-        .benefits {
-            background: var(--card);
-            border: 1px solid var(--border);
-            border-radius: 12px;
-            padding: 3rem;
-            margin-bottom: 4rem;
-        }
-
-        .benefits-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 2rem;
-            margin-top: 2rem;
-        }
-
-        .benefit-item {
-            display: flex;
-            gap: 1rem;
-        }
-
-        .benefit-icon {
-            font-size: 1.5rem;
-            flex-shrink: 0;
-        }
-
-        .benefit-content h3 {
-            font-size: 1.1rem;
-            margin-bottom: 0.5rem;
-            color: var(--primary);
-        }
-
-        .benefit-content p {
-            color: var(--muted);
-            font-size: 0.95rem;
-        }
-
-        .stats {
-            background: linear-gradient(135deg, rgba(0, 212, 255, 0.1), rgba(124, 58, 237, 0.1));
-            border: 1px solid var(--border);
-            border-radius: 12px;
-            padding: 3rem;
-            margin-bottom: 4rem;
-        }
-
-        .stats-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 2rem;
-            margin-top: 2rem;
-        }
-
-        .stat-box {
-            text-align: center;
-        }
-
-        .stat-number {
-            font-size: 2.5rem;
-            font-weight: 800;
-            color: var(--primary);
-            margin-bottom: 0.5rem;
-        }
-
-        .stat-label {
-            color: var(--muted);
-            font-size: 0.95rem;
-        }
-
-        .cta-section {
-            background: linear-gradient(135deg, rgba(0, 212, 255, 0.1), rgba(124, 58, 237, 0.1));
-            border: 1px solid var(--border);
-            border-radius: 12px;
-            padding: 3rem;
-            text-align: center;
-            margin-bottom: 4rem;
-        }
-
-        .cta-section h2 {
-            font-size: 2rem;
-            margin-bottom: 1rem;
-            color: var(--primary);
-        }
-
-        .cta-section p {
-            font-size: 1.1rem;
-            color: var(--muted);
-            margin-bottom: 2rem;
-            max-width: 600px;
-            margin-left: auto;
-            margin-right: auto;
-        }
+        .tick { color: var(--success); font-weight: bold; }
+        .cross { color: var(--danger); font-weight: bold; }
 
         footer {
-            background: var(--card);
-            border-top: 1px solid var(--border);
+            background: linear-gradient(135deg, var(--quantum-darker), var(--quantum-dark));
+            border-top: 2px solid var(--quantum-border);
             padding: 2rem;
             text-align: center;
-            color: var(--muted);
-            margin-top: 4rem;
+            color: var(--quantum-muted);
+            margin-top: 5rem;
+            position: relative;
+            z-index: 1;
         }
 
-        .footer-content {
-            max-width: 1200px;
-            margin: 0 auto;
-        }
-
-        .footer-links {
-            display: flex;
-            justify-content: center;
-            gap: 2rem;
-            margin-bottom: 1rem;
-            flex-wrap: wrap;
-        }
-
-        .footer-links a {
-            color: var(--text);
+        footer a {
+            color: var(--quantum-primary);
             text-decoration: none;
-            transition: color 0.3s;
+            transition: all 0.3s;
         }
 
-        .footer-links a:hover {
-            color: var(--primary);
+        footer a:hover {
+            color: var(--quantum-secondary);
+            text-shadow: 0 0 10px rgba(0, 255, 136, 0.4);
         }
 
         @media (max-width: 768px) {
+            .hero { padding: 3rem 1.5rem; }
             .hero h1 { font-size: 2rem; }
-            .hero .subtitle { font-size: 1.1rem; }
+            .nav-links { gap: 1rem; font-size: 0.9rem; }
+            .container { padding: 1.5rem; }
+            .protocol-section { padding: 2rem; }
             .cta-buttons { flex-direction: column; }
             .btn { width: 100%; }
-            .comparison-table { font-size: 0.9rem; }
-            .comparison-table th, .comparison-table td { padding: 0.75rem; }
         }
     </style>
 </head>
 <body>
     <header>
         <nav>
-            <div class="logo">⚛ QKD BB84</div>
+            <div class="logo">QKD BB84</div>
             <ul class="nav-links">
                 <li><a href="/" class="active">Home</a></li>
                 <li><a href="/simulator">Simulator</a></li>
-                <li><a href="/documentation">Documentation</a></li>
+                <li><a href="/documentation">Docs</a></li>
             </ul>
         </nav>
     </header>
 
     <div class="container">
         <section class="hero">
-            <h1>Secure Communication Using Quantum Key Distribution</h1>
-            <p class="subtitle">Ensuring Confidentiality with Quantum Mechanics</p>
+            <h1>⚛️ Quantum Key Distribution</h1>
+            <p class="subtitle">BB84 Protocol - Secure Communication at Quantum Speed</p>
             <p class="description">
-                Leverage the fundamental principles of quantum mechanics to achieve unconditional security in key distribution. 
-                This implementation demonstrates the BB84 protocol, resistant to quantum computing attacks and eavesdropping attempts.
+                Harness the power of quantum mechanics to achieve unconditional security in key distribution. 
+                Our interactive simulator demonstrates how quantum superposition and entanglement principles 
+                prevent eavesdropping with mathematical certainty.
             </p>
             <div class="cta-buttons">
-                <a href="/simulator" class="btn btn-primary">▶ Launch Simulator</a>
-                <a href="/documentation" class="btn btn-secondary">📖 Learn More</a>
+                <a href="/simulator" class="btn btn-primary">🚀 Launch Simulator</a>
+                <a href="/documentation" class="btn btn-secondary">📖 Learn Protocol</a>
             </div>
         </section>
 
         <section class="features">
             <div class="feature-card">
                 <div class="feature-icon">🔐</div>
-                <div class="feature-title">Quantum Security</div>
+                <div class="feature-title">Unconditional Security</div>
                 <div class="feature-description">
-                    Information-theoretic security proven against quantum adversaries. No computational assumptions required.
+                    Mathematical proof of security against quantum adversaries, guaranteed by the laws of quantum mechanics.
                 </div>
             </div>
-
             <div class="feature-card">
-                <div class="feature-icon">👁</div>
+                <div class="feature-icon">🕵️</div>
                 <div class="feature-title">Eavesdropping Detection</div>
                 <div class="feature-description">
-                    Automatically detects unauthorized access via QBER (Quantum Bit Error Rate) elevation to ~25%.
+                    Automatic detection of intercept-resend attacks via Quantum Bit Error Rate (QBER) monitoring.
                 </div>
             </div>
-
-            <div class="feature-card">
-                <div class="feature-icon">⚛</div>
-                <div class="feature-title">BB84 Protocol</div>
-                <div class="feature-description">
-                    Complete implementation of the first quantum cryptographic protocol with basis reconciliation and sifting.
-                </div>
-            </div>
-
-            <div class="feature-card">
-                <div class="feature-icon">📊</div>
-                <div class="feature-title">Real-Time Visualization</div>
-                <div class="feature-description">
-                    Interactive simulator showing protocol execution, qubit analysis, and security metrics in real-time.
-                </div>
-            </div>
-
             <div class="feature-card">
                 <div class="feature-icon">🧪</div>
-                <div class="feature-title">Comprehensive Testing</div>
+                <div class="feature-title">Interactive Learning</div>
                 <div class="feature-description">
-                    31 unit tests with >95% code coverage ensuring protocol correctness and reliability.
+                    Real-time visualization of quantum states, basis manipulation, and protocol execution steps.
                 </div>
             </div>
-
             <div class="feature-card">
-                <div class="feature-icon">📚</div>
-                <div class="feature-title">Educational Value</div>
+                <div class="feature-icon">⚡</div>
+                <div class="feature-title">Production Ready</div>
                 <div class="feature-description">
-                    Well-documented code with detailed guides explaining quantum cryptography principles and implementation.
+                    Full-stack implementation with comprehensive testing, Docker support, and deployment ready.
                 </div>
             </div>
         </section>
 
         <section class="protocol-section">
-            <h2 class="section-title">BB84 Protocol Overview</h2>
-            
+            <h2 class="section-title">⚛️ BB84 Protocol Overview</h2>
+            <p style="color: var(--quantum-muted); font-size: 1.05rem; margin-bottom: 2.5rem; line-height: 1.8; position: relative; z-index: 1;">
+                The BB84 protocol enables two parties (Alice and Bob) to establish a shared secret key through quantum communication:
+            </p>
             <div class="protocol-steps">
                 <div class="step-card">
                     <div class="step-number">1</div>
-                    <div class="step-title">Qubit Preparation</div>
-                    <div class="step-description">
-                        Alice generates random bits and encodes them into quantum states using random bases (+ or ×).
-                    </div>
+                    <div class="step-title">Preparation</div>
+                    <div class="step-description">Alice generates random bits and random bases</div>
                 </div>
-
                 <div class="step-card">
                     <div class="step-number">2</div>
-                    <div class="step-title">Quantum Transmission</div>
-                    <div class="step-description">
-                        Qubits are transmitted through the quantum channel. Eve may optionally intercept and measure.
-                    </div>
+                    <div class="step-title">Encoding</div>
+                    <div class="step-description">Encode bits into quantum states using bases</div>
                 </div>
-
                 <div class="step-card">
                     <div class="step-number">3</div>
-                    <div class="step-title">Random Measurement</div>
-                    <div class="step-description">
-                        Bob randomly selects measurement bases and measures each qubit, recording results.
-                    </div>
+                    <div class="step-title">Transmission</div>
+                    <div class="step-description">Send qubits through quantum channel</div>
                 </div>
-
                 <div class="step-card">
                     <div class="step-number">4</div>
-                    <div class="step-title">Basis Reconciliation</div>
-                    <div class="step-description">
-                        Alice and Bob publicly compare bases (not bits) and keep only matching basis measurements.
-                    </div>
+                    <div class="step-title">Measurement</div>
+                    <div class="step-description">Bob measures in random bases</div>
                 </div>
-
                 <div class="step-card">
                     <div class="step-number">5</div>
-                    <div class="step-title">QBER Calculation</div>
-                    <div class="step-description">
-                        Calculate quantum bit error rate to detect eavesdropping. Threshold: < 11% for secure channel.
-                    </div>
+                    <div class="step-title">Sifting</div>
+                    <div class="step-description">Compare bases, keep matching bits</div>
                 </div>
-
                 <div class="step-card">
                     <div class="step-number">6</div>
-                    <div class="step-title">Key Derivation</div>
-                    <div class="step-description">
-                        Use sifted key with SHA-256 to derive cryptographic key for message encryption.
-                    </div>
+                    <div class="step-title">Verification</div>
+                    <div class="step-description">Calculate QBER, detect eavesdropping</div>
                 </div>
             </div>
 
-            <div class="security-comparison">
-                <h3 style="color: var(--primary); margin-bottom: 1rem;">Security Comparison</h3>
+            <section class="security-comparison">
+                <h3 style="color: var(--quantum-primary); margin-bottom: 1.5rem; font-size: 1.3rem; letter-spacing: 1px;">🔒 Security Properties</h3>
                 <table class="comparison-table">
                     <thead>
                         <tr>
                             <th>Scenario</th>
                             <th>QBER</th>
                             <th>Status</th>
-                            <th>Detection</th>
                         </tr>
                     </thead>
                     <tbody>
                         <tr>
-                            <td>Clean Channel (No Eve)</td>
+                            <td>Clean channel (no Eve)</td>
                             <td>0%</td>
-                            <td><span class="check">✓ Secure</span></td>
-                            <td>N/A</td>
+                            <td><span class="tick">✓ Secure</span></td>
                         </tr>
                         <tr>
-                            <td>With Eve (Intercept-Resend)</td>
+                            <td>With Eve (intercept)</td>
                             <td>~25%</td>
                             <td><span class="cross">✗ Detected</span></td>
-                            <td>QBER Elevation</td>
                         </tr>
                         <tr>
-                            <td>Threshold</td>
+                            <td>Threshold for alarm</td>
                             <td>11%</td>
-                            <td>Decision Point</td>
-                            <td>Abort if exceeded</td>
+                            <td>Decision point</td>
                         </tr>
                     </tbody>
                 </table>
-            </div>
+            </section>
 
             <div class="metrics">
                 <div class="metric">
-                    <div class="metric-value">50%</div>
-                    <div class="metric-label">Sift Efficiency</div>
+                    <div class="metric-value">100</div>
+                    <div class="metric-label">Qubits Transmitted</div>
                 </div>
                 <div class="metric">
-                    <div class="metric-value">~100ms</div>
-                    <div class="metric-label">Execution Time (100 qubits)</div>
+                    <div class="metric-value">~50</div>
+                    <div class="metric-label">Sifted Key Bits</div>
                 </div>
                 <div class="metric">
                     <div class="metric-value">0%</div>
-                    <div class="metric-label">QBER (Secure Channel)</div>
+                    <div class="metric-label">QBER (Clean)</div>
                 </div>
                 <div class="metric">
                     <div class="metric-value">25%</div>
-                    <div class="metric-label">QBER (With Eavesdropper)</div>
+                    <div class="metric-label">QBER (Eve)</div>
                 </div>
-            </div>
-        </section>
-
-        <section class="benefits">
-            <h2 class="section-title">Key Advantages of Quantum Cryptography</h2>
-            
-            <div class="benefits-grid">
-                <div class="benefit-item">
-                    <div class="benefit-icon">🔒</div>
-                    <div class="benefit-content">
-                        <h3>Unconditional Security</h3>
-                        <p>Proven secure against quantum computers and any computational advances.</p>
-                    </div>
-                </div>
-
-                <div class="benefit-item">
-                    <div class="benefit-icon">🚨</div>
-                    <div class="benefit-content">
-                        <h3>Eavesdropping Detection</h3>
-                        <p>Any unauthorized access introduces detectable errors in the quantum channel.</p>
-                    </div>
-                </div>
-
-                <div class="benefit-item">
-                    <div class="benefit-icon">⚛</div>
-                    <div class="benefit-content">
-                        <h3>Quantum Mechanics</h3>
-                        <p>Leverages no-cloning theorem and measurement disturbance principles.</p>
-                    </div>
-                </div>
-
-                <div class="benefit-item">
-                    <div class="benefit-icon">🔑</div>
-                    <div class="benefit-content">
-                        <h3>Perfect Secrecy</h3>
-                        <p>One-time pad style encryption with quantum-derived keys.</p>
-                    </div>
-                </div>
-
-                <div class="benefit-item">
-                    <div class="benefit-icon">📈</div>
-                    <div class="benefit-content">
-                        <h3>Scalable</h3>
-                        <p>Suitable for future quantum network implementations and real-world deployment.</p>
-                    </div>
-                </div>
-
-                <div class="benefit-item">
-                    <div class="benefit-icon">🎓</div>
-                    <div class="benefit-content">
-                        <h3>Educational</h3>
-                        <p>Comprehensive implementation demonstrating quantum cryptography principles.</p>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <section class="stats">
-            <h2 class="section-title">Project Statistics</h2>
-            
-            <div class="stats-grid">
-                <div class="stat-box">
-                    <div class="stat-number">6</div>
-                    <div class="stat-label">Core Protocol Modules</div>
-                </div>
-                <div class="stat-box">
-                    <div class="stat-number">31</div>
-                    <div class="stat-label">Unit Tests</div>
-                </div>
-                <div class="stat-box">
-                    <div class="stat-number">>95%</div>
-                    <div class="stat-label">Code Coverage</div>
-                </div>
-                <div class="stat-box">
-                    <div class="stat-number">~2000</div>
-                    <div class="stat-label">Lines of Code</div>
-                </div>
-                <div class="stat-box">
-                    <div class="stat-number">11</div>
-                    <div class="stat-label">Documentation Guides</div>
-                </div>
-                <div class="stat-box">
-                    <div class="stat-number">5</div>
-                    <div class="stat-label">API Endpoints</div>
-                </div>
-            </div>
-        </section>
-
-        <section class="cta-section">
-            <h2>Ready to Explore Quantum Cryptography?</h2>
-            <p>
-                Launch the interactive simulator to see the BB84 protocol in action. 
-                Experiment with different parameters, detect eavesdropping attempts, and understand quantum security.
-            </p>
-            <div class="cta-buttons">
-                <a href="/simulator" class="btn btn-primary">▶ Launch Simulator</a>
-                <a href="/documentation" class="btn btn-secondary">📖 Read Documentation</a>
             </div>
         </section>
     </div>
 
     <footer>
-        <div class="footer-content">
-            <div class="footer-links">
-                <a href="/">Home</a>
-                <a href="/simulator">Simulator</a>
-                <a href="/documentation">Documentation</a>
-                <a href="https://github.com">GitHub</a>
-            </div>
-            <p>
-                Quantum Key Distribution (QKD) BB84 Protocol Implementation<br>
-                Ensuring Confidentiality with Quantum Mechanics<br>
-                <small>© 2024 | MIT License | Production Ready</small>
-            </p>
-        </div>
+        <p>&copy; 2026 Quantum Key Distribution Protocol - BB84 Implementation</p>
+        <p>Secure communication through quantum mechanics | <a href="https://github.com">GitHub</a> | <a href="https://arxiv.org">Research</a></p>
     </footer>
 </body>
 </html>
