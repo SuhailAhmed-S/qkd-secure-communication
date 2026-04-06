@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -277,7 +277,7 @@
     <nav class="navbar">
         <div class="nav-container">
             <div class="nav-brand">
-                <span class="brand-accent">◆</span>
+                <span class="brand-accent">â—†</span>
                 <span class="brand-text">Quantum Cipher</span>
             </div>
             <ul class="nav-links">
@@ -333,19 +333,19 @@
 
                     <h3>Protocol Steps</h3>
                     <ol class="step-list">
-                        <li><strong>Qubit Preparation:</strong> Alice randomly chooses a basis (rectilinear + or diagonal ×) and prepares qubits with polarization states 0 or 1</li>
+                        <li><strong>Qubit Preparation:</strong> Alice randomly chooses a basis (rectilinear + or diagonal Ã—) and prepares qubits with polarization states 0 or 1</li>
                         <li><strong>Quantum Channel:</strong> Alice sends qubits to Bob through a quantum channel (potentially monitored by Eve)</li>
                         <li><strong>Eavesdropping (Eve):</strong> Optional: Eve intercepts and measures qubits, potentially introducing errors</li>
                         <li><strong>Bob's Measurement:</strong> Bob randomly chooses bases and measures received qubits</li>
                         <li><strong>Sifting:</strong> Alice and Bob publicly compare bases (not values) and keep only bits measured with matching bases</li>
                         <li><strong>QBER Calculation:</strong> Both parties sample and check a subset of sifted bits to compute Quantum Bit Error Rate</li>
-                        <li><strong>Privacy Amplification:</strong> Apply universal hashing to reduce eavesdropper information from O(n) to O(λ⁻¹)</li>
+                        <li><strong>Privacy Amplification:</strong> Apply universal hashing to reduce eavesdropper information from O(n) to O(Î»â»Â¹)</li>
                         <li><strong>Encryption:</strong> Use the amplified key for symmetric encryption (XOR or other cipher)</li>
                     </ol>
 
                     <div class="protocol-diagram">
-                        Alice → [Qubits] → Quantum Channel → [Measurement] → Bob<br>
-                        ↓<br>
+                        Alice â†’ [Qubits] â†’ Quantum Channel â†’ [Measurement] â†’ Bob<br>
+                        â†“<br>
                         Eve (Optional Eavesdropper)
                     </div>
 
@@ -353,13 +353,13 @@
                     <div class="feature-grid">
                         <div class="feature-card">
                             <h4>Rectilinear Basis (+)</h4>
-                            <p><code>|0⟩ = Horizontal (0°)</code></p>
-                            <p><code>|1⟩ = Vertical (90°)</code></p>
+                            <p><code>|0âŸ© = Horizontal (0Â°)</code></p>
+                            <p><code>|1âŸ© = Vertical (90Â°)</code></p>
                         </div>
                         <div class="feature-card">
-                            <h4>Diagonal Basis (×)</h4>
-                            <p><code>|0⟩ = Diagonal (-45°)</code></p>
-                            <p><code>|1⟩ = Anti-diagonal (45°)</code></p>
+                            <h4>Diagonal Basis (Ã—)</h4>
+                            <p><code>|0âŸ© = Diagonal (-45Â°)</code></p>
+                            <p><code>|1âŸ© = Anti-diagonal (45Â°)</code></p>
                         </div>
                     </div>
                 </div>
@@ -377,28 +377,28 @@
                     <div class="feature-grid">
                         <div class="feature-card">
                             <h4>QBER &lt; 11%</h4>
-                            <p><span class="key-term">SECURE ✓</span></p>
+                            <p><span class="key-term">SECURE âœ“</span></p>
                             <p>No significant eavesdropping detected. Key is safe to use.</p>
                         </div>
                         <div class="feature-card">
                             <h4>QBER = 11-25%</h4>
-                            <p><span class="key-term">SUSPICIOUS ⚠</span></p>
+                            <p><span class="key-term">SUSPICIOUS âš </span></p>
                             <p>Indicates possible presence of Eve. Protocol continues cautiously.</p>
                         </div>
                         <div class="feature-card">
                             <h4>QBER &gt; 25%</h4>
-                            <p><span class="key-term">COMPROMISED ✗</span></p>
+                            <p><span class="key-term">COMPROMISED âœ—</span></p>
                             <p>Definite eavesdropping detected. Abort protocol and investigate.</p>
                         </div>
                         <div class="feature-card">
-                            <h4>QBER ≈ 25% (with Eve)</h4>
+                            <h4>QBER â‰ˆ 25% (with Eve)</h4>
                             <p><span class="key-term">EXPECTED WITH EVE</span></p>
                             <p>Theoretical prediction when Eve eavesdrops without strategy.</p>
                         </div>
                     </div>
 
                     <div class="warning-box">
-                        <strong>⚠ Security Note:</strong> QBER calculation uses a publicly announced subset of bits. These bits must be discarded from the final key, as Eve has seen their values.
+                        <strong>âš  Security Note:</strong> QBER calculation uses a publicly announced subset of bits. These bits must be discarded from the final key, as Eve has seen their values.
                     </div>
                 </div>
 
@@ -408,19 +408,19 @@
                     <p>Privacy amplification reduces the information Eve has gained about the final key through universal hashing and randomness extraction.</p>
 
                     <h3>The Problem</h3>
-                    <p>Eve may have partial information about the sifted key even after QBER testing. With QBER ≈ 25% (Eve guesses wrong 25% of the time), Eve still knows ~75% of key bits. Privacy amplification extracts a smaller key on which Eve's advantage is negligible.</p>
+                    <p>Eve may have partial information about the sifted key even after QBER testing. With QBER â‰ˆ 25% (Eve guesses wrong 25% of the time), Eve still knows ~75% of key bits. Privacy amplification extracts a smaller key on which Eve's advantage is negligible.</p>
 
                     <h3>Universal Hashing (Toeplitz)</h3>
-                    <p>Uses Toeplitz matrices for ε-universal hashing with collision probability ≤ 2^(-λ):</p>
+                    <p>Uses Toeplitz matrices for Îµ-universal hashing with collision probability â‰¤ 2^(-Î»):</p>
                     <div class="code-block">
-                        <code>T = Random Toeplitz matrix (λ × n)<br>
-Amplified_Key = T · Key (modulo 2)</code>
+                        <code>T = Random Toeplitz matrix (Î» Ã— n)<br>
+Amplified_Key = T Â· Key (modulo 2)</code>
                     </div>
 
                     <h3>SHA-256 Extraction</h3>
                     <p>Alternative using counter-mode SHA-256 for cryptographic-strength randomness extraction:</p>
                     <div class="code-block">
-                        <code>For i in range(λ/256):<br>
+                        <code>For i in range(Î»/256):<br>
 &nbsp;&nbsp;block[i] = SHA256(key || counter=i)<br>
 Amplified_Key = Concatenate all blocks</code>
                     </div>
@@ -428,14 +428,14 @@ Amplified_Key = Concatenate all blocks</code>
                     <h3>Compression Based on QBER</h3>
                     <p>The amplification method adapts based on channel quality:</p>
                     <div class="code-block">
-                        <code>0-2% QBER   → 66% compression (strong channel)<br>
-2-5% QBER   → 50% compression (good channel)<br>
-5-11% QBER  → 30% compression (weak channel)<br>
->11% QBER   → Abort protocol</code>
+                        <code>0-2% QBER   â†’ 66% compression (strong channel)<br>
+2-5% QBER   â†’ 50% compression (good channel)<br>
+5-11% QBER  â†’ 30% compression (weak channel)<br>
+>11% QBER   â†’ Abort protocol</code>
                     </div>
 
                     <div class="success-box">
-                        <strong>✓ Security Guarantee:</strong> After amplification, Eve's advantage drops to at most 2^(-λ) where λ is the security parameter (default 128).
+                        <strong>âœ“ Security Guarantee:</strong> After amplification, Eve's advantage drops to at most 2^(-Î») where Î» is the security parameter (default 128).
                     </div>
                 </div>
 
@@ -534,10 +534,10 @@ print(f"Final key length: {result['amplified_key_length']}")
                     </ul>
 
                     <h3>Privacy Amplification Guarantee</h3>
-                    <p>Theorem (Vazirani-Widerson): After universal hashing by ε-universal family, Eve's Shannon entropy about the final key increases by log(1/ε). With ε ≤ 2^(-128), Eve gains negligible advantage.</p>
+                    <p>Theorem (Vazirani-Widerson): After universal hashing by Îµ-universal family, Eve's Shannon entropy about the final key increases by log(1/Îµ). With Îµ â‰¤ 2^(-128), Eve gains negligible advantage.</p>
 
                     <div class="success-box">
-                        <strong>Conclusion:</strong> For 100-qubit basis agreement, ~50 sifted bits → ~25 amplified bits with 128-bit security parameter provides practical quantum-secure key exchange.
+                        <strong>Conclusion:</strong> For 100-qubit basis agreement, ~50 sifted bits â†’ ~25 amplified bits with 128-bit security parameter provides practical quantum-secure key exchange.
                     </div>
                 </div>
 
@@ -568,666 +568,6 @@ print(f"Final key length: {result['amplified_key_length']}")
             document.querySelectorAll('.nav-link').forEach(link => {
                 link.classList.remove('active');
                 if(link.getAttribute('href').slice(1) === current) {
-                    link.classList.add('active');
-                }
-            });
-        });
-    </script>
-</body>
-</html>
-
-        :root {
-            --quantum-primary: #00ff88;
-            --quantum-secondary: #00ccff;
-            --quantum-accent: #ff00ff;
-            --quantum-dark: #0a0e27;
-            --quantum-surface: #0f1a3a;
-            --quantum-card: #141e3e;
-            --quantum-border: #1a3a5c;
-            --quantum-text: #e0f2ff;
-            --quantum-muted: #6b8fb8;
-            --success: #00ff88;
-            --danger: #ff0055;
-            --warning: #ffaa00;
-            --primary: var(--quantum-primary);
-            --secondary: var(--quantum-secondary);
-            --bg: var(--quantum-dark);
-            --surface: var(--quantum-surface);
-            --card: var(--quantum-card);
-            --border: var(--quantum-border);
-            --text: var(--quantum-text);
-            --muted: var(--quantum-muted);
-        }
-
-        body {
-            font-family: 'JetBrains Mono', 'Courier New', monospace;
-            background: var(--bg);
-            background-image: 
-                radial-gradient(circle at 20% 50%, rgba(0, 255, 136, 0.05) 0%, transparent 50%),
-                radial-gradient(circle at 80% 80%, rgba(0, 204, 255, 0.05) 0%, transparent 50%);
-            color: var(--text);
-            line-height: 1.6;
-        }
-
-        header {
-            background: linear-gradient(135deg, rgba(10, 14, 39, 0.95), rgba(15, 26, 58, 0.95));
-            border-bottom: 3px solid var(--quantum-primary);
-            padding: 1rem 2rem;
-            position: sticky;
-            top: 0;
-            z-index: 100;
-            backdrop-filter: blur(20px);
-            box-shadow: 0 8px 32px rgba(0, 255, 136, 0.1);
-        }
-
-        nav {
-            max-width: 1200px;
-            margin: 0 auto;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        .logo {
-            font-size: 1.5rem;
-            font-weight: 700;
-            color: var(--primary);
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-        }
-
-        .nav-links {
-            display: flex;
-            gap: 2rem;
-            list-style: none;
-        }
-
-        .nav-links a {
-            color: var(--text);
-            text-decoration: none;
-            transition: color 0.3s;
-            font-weight: 500;
-        }
-
-        .nav-links a:hover, .nav-links a.active {
-            color: var(--primary);
-        }
-
-        .container {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 2rem;
-        }
-
-        .doc-layout {
-            display: grid;
-            grid-template-columns: 250px 1fr;
-            gap: 2rem;
-        }
-
-        .sidebar {
-            background: var(--card);
-            border: 1px solid var(--border);
-            border-radius: 12px;
-            padding: 1.5rem;
-            height: fit-content;
-            position: sticky;
-            top: 120px;
-        }
-
-        .sidebar-title {
-            font-size: 0.9rem;
-            font-weight: 700;
-            color: var(--muted);
-            text-transform: uppercase;
-            margin-bottom: 1rem;
-        }
-
-        .sidebar-links {
-            list-style: none;
-        }
-
-        .sidebar-links li {
-            margin-bottom: 0.5rem;
-        }
-
-        .sidebar-links a {
-            color: var(--text);
-            text-decoration: none;
-            font-size: 0.95rem;
-            transition: color 0.3s;
-            display: block;
-            padding: 0.5rem;
-            border-radius: 4px;
-        }
-
-        .sidebar-links a:hover, .sidebar-links a.active {
-            color: var(--primary);
-            background: rgba(0, 212, 255, 0.1);
-        }
-
-        .content {
-            background: var(--card);
-            border: 1px solid var(--border);
-            border-radius: 12px;
-            padding: 2rem;
-        }
-
-        .doc-section {
-            margin-bottom: 3rem;
-        }
-
-        .doc-section h2 {
-            font-size: 1.8rem;
-            color: var(--primary);
-            margin-bottom: 1rem;
-            padding-bottom: 0.5rem;
-            border-bottom: 2px solid var(--border);
-        }
-
-        .doc-section h3 {
-            font-size: 1.3rem;
-            color: var(--secondary);
-            margin-top: 1.5rem;
-            margin-bottom: 0.75rem;
-        }
-
-        .doc-section p {
-            color: var(--text);
-            margin-bottom: 1rem;
-            line-height: 1.8;
-        }
-
-        .doc-section ul, .doc-section ol {
-            margin-left: 2rem;
-            margin-bottom: 1rem;
-        }
-
-        .doc-section li {
-            margin-bottom: 0.5rem;
-            color: var(--text);
-        }
-
-        .code-block {
-            background: var(--surface);
-            border: 1px solid var(--border);
-            border-radius: 6px;
-            padding: 1rem;
-            margin: 1rem 0;
-            overflow-x: auto;
-            font-family: 'Consolas', 'Courier New', monospace;
-            font-size: 0.9rem;
-            color: var(--primary);
-            line-height: 1.4;
-        }
-
-        .highlight {
-            background: rgba(0, 212, 255, 0.1);
-            border-left: 3px solid var(--primary);
-            padding: 1rem;
-            margin: 1rem 0;
-            border-radius: 4px;
-        }
-
-        .highlight strong {
-            color: var(--primary);
-        }
-
-        .table-wrapper {
-            overflow-x: auto;
-            margin: 1rem 0;
-        }
-
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            background: var(--surface);
-            border-radius: 6px;
-            overflow: hidden;
-        }
-
-        th, td {
-            padding: 0.75rem;
-            text-align: left;
-            border-bottom: 1px solid var(--border);
-        }
-
-        th {
-            background: rgba(0, 212, 255, 0.1);
-            color: var(--primary);
-            font-weight: 700;
-        }
-
-        tr:hover {
-            background: rgba(0, 212, 255, 0.05);
-        }
-
-        .formula {
-            background: var(--surface);
-            border: 1px solid var(--border);
-            border-radius: 6px;
-            padding: 1rem;
-            margin: 1rem 0;
-            text-align: center;
-            font-family: 'Courier New', monospace;
-            color: var(--primary);
-        }
-
-        .diagram {
-            background: var(--surface);
-            border: 1px solid var(--border);
-            border-radius: 6px;
-            padding: 2rem;
-            margin: 1rem 0;
-            text-align: center;
-            color: var(--muted);
-            font-family: 'Courier New', monospace;
-            white-space: pre;
-            overflow-x: auto;
-        }
-
-        .warning {
-            background: rgba(239, 68, 68, 0.1);
-            border-left: 3px solid var(--danger);
-            padding: 1rem;
-            margin: 1rem 0;
-            border-radius: 4px;
-            color: var(--text);
-        }
-
-        .success {
-            background: rgba(16, 185, 129, 0.1);
-            border-left: 3px solid var(--success);
-            padding: 1rem;
-            margin: 1rem 0;
-            border-radius: 4px;
-            color: var(--text);
-        }
-
-        footer {
-            background: var(--card);
-            border-top: 1px solid var(--border);
-            padding: 2rem;
-            text-align: center;
-            color: var(--muted);
-            margin-top: 4rem;
-        }
-
-        @media (max-width: 768px) {
-            .doc-layout { grid-template-columns: 1fr; }
-            .sidebar { position: static; }
-            .doc-section h2 { font-size: 1.5rem; }
-        }
-    </style>
-</head>
-<body>
-    <header>
-        <nav>
-            <div class="logo">⚛ QKD BB84</div>
-            <ul class="nav-links">
-                <li><a href="/">Home</a></li>
-                <li><a href="/simulator">Simulator</a></li>
-                <li><a href="/documentation" class="active">Documentation</a></li>
-            </ul>
-        </nav>
-    </header>
-
-    <div class="container">
-        <div class="doc-layout">
-            <aside class="sidebar">
-                <div class="sidebar-title">📚 Contents</div>
-                <ul class="sidebar-links">
-                    <li><a href="#overview" class="active">Overview</a></li>
-                    <li><a href="#protocol">BB84 Protocol</a></li>
-                    <li><a href="#security">Security Analysis</a></li>
-                    <li><a href="#qber">QBER Calculation</a></li>
-                    <li><a href="#implementation">Implementation</a></li>
-                    <li><a href="#results">Results & Metrics</a></li>
-                    <li><a href="#references">References</a></li>
-                </ul>
-            </aside>
-
-            <main class="content">
-                <section class="doc-section" id="overview">
-                    <h2>📖 Overview</h2>
-                    <p>
-                        Quantum Key Distribution (QKD) represents a revolutionary approach to secure communication by leveraging 
-                        the fundamental principles of quantum mechanics. This implementation focuses on the BB84 protocol, one of 
-                        the first and most widely studied quantum cryptographic protocols.
-                    </p>
-                    <p>
-                        The BB84 protocol enables two communicating parties to securely generate a shared secret key by transmitting 
-                        quantum bits (qubits) encoded using photon polarization states. The inherent properties of quantum mechanics, 
-                        such as the no-cloning theorem and measurement disturbance, ensure that any eavesdropping attempt introduces 
-                        detectable errors in the communication channel.
-                    </p>
-
-                    <h3>Key Concepts</h3>
-                    <ul>
-                        <li><strong>Quantum Bits (Qubits):</strong> Fundamental units of quantum information</li>
-                        <li><strong>Basis Reconciliation:</strong> Public comparison of measurement bases</li>
-                        <li><strong>Sifting:</strong> Keeping only bits where bases matched</li>
-                        <li><strong>QBER:</strong> Quantum Bit Error Rate for security detection</li>
-                        <li><strong>No-Cloning Theorem:</strong> Impossible to copy unknown quantum states</li>
-                        <li><strong>Measurement Disturbance:</strong> Measuring changes the quantum state</li>
-                    </ul>
-                </section>
-
-                <section class="doc-section" id="protocol">
-                    <h2>🔄 BB84 Protocol</h2>
-                    <p>
-                        The BB84 protocol consists of six main steps:
-                    </p>
-
-                    <h3>Step 1: Qubit Preparation</h3>
-                    <p>
-                        Alice generates random bits and selects random measurement bases for each qubit:
-                    </p>
-                    <ul>
-                        <li>Rectilinear Basis (+): 0→|0⟩, 1→|1⟩</li>
-                        <li>Diagonal Basis (×): 0→|+⟩, 1→|−⟩</li>
-                    </ul>
-
-                    <h3>Step 2: Quantum Transmission</h3>
-                    <p>
-                        Alice sends the encoded qubits through the quantum channel to Bob. Eve may optionally intercept and measure.
-                    </p>
-
-                    <h3>Step 3: Random Measurement</h3>
-                    <p>
-                        Bob randomly selects measurement bases for each received qubit and records the measurement results.
-                    </p>
-
-                    <h3>Step 4: Basis Reconciliation</h3>
-                    <p>
-                        Alice and Bob publicly compare their basis choices (not the bits) over an authenticated classical channel.
-                    </p>
-
-                    <h3>Step 5: Sifting</h3>
-                    <p>
-                        Both parties keep only the bits where their bases matched. This forms the "sifted key."
-                    </p>
-
-                    <h3>Step 6: QBER Calculation</h3>
-                    <p>
-                        Calculate the quantum bit error rate to detect eavesdropping. If QBER exceeds the threshold (11%), 
-                        abort communication.
-                    </p>
-
-                    <div class="diagram">Alice                    Quantum Channel                    Bob
-  |                           |                              |
-  ├─> Generate random bits   |                              |
-  ├─> Choose random bases    |                              |
-  ├─> Encode qubits ────────>|─────────────────────────────>|
-  |                           |    (Eve intercepts here)     |
-  |                           |                    <─Measure |
-  |                           |                              |
-  |<─ Public basis comparison (over authenticated channel)  >|
-  |                                                          |
-  └─────── Sift key ────────────────────────────────────────>|
-  └─────── Verify QBER ───────────────────────────────────────|
-  └─────── Encrypt message ──────────────────────────────────>|</div>
-                </section>
-
-                <section class="doc-section" id="security">
-                    <h2>🔒 Security Analysis</h2>
-
-                    <h3>Information-Theoretic Security</h3>
-                    <p>
-                        The BB84 protocol provides unconditional security based on the laws of quantum mechanics, 
-                        not on computational assumptions. This means it remains secure even against quantum computers.
-                    </p>
-
-                    <h3>Eavesdropping Detection</h3>
-                    <p>
-                        When Eve attempts to intercept and measure qubits:
-                    </p>
-                    <ul>
-                        <li>Eve uses the wrong basis ~50% of the time</li>
-                        <li>This introduces ~12.5% errors in the sifted key</li>
-                        <li>Combined with Bob's measurement errors, QBER rises to ~25%</li>
-                        <li>This elevation is easily detected and indicates eavesdropping</li>
-                    </ul>
-
-                    <div class="table-wrapper">
-                        <table>
-                            <thead>
-                                <tr>
-                                    <th>Scenario</th>
-                                    <th>QBER</th>
-                                    <th>Status</th>
-                                    <th>Action</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr>
-                                    <td>Clean Channel (No Eve)</td>
-                                    <td>0%</td>
-                                    <td>✓ Secure</td>
-                                    <td>Proceed with encryption</td>
-                                </tr>
-                                <tr>
-                                    <td>With Eve (Intercept-Resend)</td>
-                                    <td>~25%</td>
-                                    <td>✗ Detected</td>
-                                    <td>Abort communication</td>
-                                </tr>
-                                <tr>
-                                    <td>Threshold</td>
-                                    <td>11%</td>
-                                    <td>Decision Point</td>
-                                    <td>Abort if exceeded</td>
-                                </tr>
-                            </tbody>
-                        </table>
-                    </div>
-
-                    <h3>Security Guarantees</h3>
-                    <div class="success">
-                        <strong>✓ Unconditional Security:</strong> Proven secure against quantum adversaries<br>
-                        <strong>✓ No Computational Assumptions:</strong> Security based on quantum mechanics<br>
-                        <strong>✓ Eavesdropping Detection:</strong> Any unauthorized access is detectable<br>
-                        <strong>✓ Perfect Secrecy:</strong> One-time pad style encryption
-                    </div>
-                </section>
-
-                <section class="doc-section" id="qber">
-                    <h2>📊 QBER Calculation</h2>
-
-                    <h3>Definition</h3>
-                    <p>
-                        The Quantum Bit Error Rate (QBER) measures the fraction of bits that differ between Alice's and Bob's 
-                        sifted keys:
-                    </p>
-
-                    <div class="formula">
-                        QBER = (number of differing bits) / (total sifted bits)
-                    </div>
-
-                    <h3>Interpretation</h3>
-                    <ul>
-                        <li><strong>QBER ≈ 0%:</strong> Clean channel, no eavesdropping</li>
-                        <li><strong>QBER ≈ 25%:</strong> Eavesdropping detected (Eve present)</li>
-                        <li><strong>QBER < 11%:</strong> Channel considered secure (threshold)</li>
-                        <li><strong>QBER ≥ 11%:</strong> Likely eavesdropping, abort communication</li>
-                    </ul>
-
-                    <h3>Threshold Justification</h3>
-                    <p>
-                        The 11% threshold accounts for:
-                    </p>
-                    <ul>
-                        <li>Quantum noise in real systems (~1-2%)</li>
-                        <li>Environmental decoherence (~1-2%)</li>
-                        <li>Detector imperfections (~1-2%)</li>
-                        <li>Statistical variance (~3-4%)</li>
-                    </ul>
-                </section>
-
-                <section class="doc-section" id="implementation">
-                    <h2>💻 Implementation Details</h2>
-
-                    <h3>Architecture</h3>
-                    <p>
-                        The implementation consists of six core modules:
-                    </p>
-                    <ul>
-                        <li><strong>alice.py:</strong> Qubit preparation and encoding</li>
-                        <li><strong>bob.py:</strong> Measurement and sifting</li>
-                        <li><strong>eve.py:</strong> Intercept-resend attack simulation</li>
-                        <li><strong>quantum_channel.py:</strong> Channel simulation</li>
-                        <li><strong>security.py:</strong> QBER calculation and encryption</li>
-                        <li><strong>qkd_main.py:</strong> Protocol orchestrator</li>
-                    </ul>
-
-                    <h3>Key Features</h3>
-                    <ul>
-                        <li>In-process execution (no distributed servers needed)</li>
-                        <li>Real-time visualization of protocol execution</li>
-                        <li>Comprehensive error handling and validation</li>
-                        <li>SHA-256 key derivation for privacy amplification</li>
-                        <li>XOR-based message encryption</li>
-                        <li>Detailed logging and metrics</li>
-                    </ul>
-
-                    <h3>Performance</h3>
-                    <div class="table-wrapper">
-                        <table>
-                            <thead>
-                                <tr>
-                                    <th>Qubits</th>
-                                    <th>Execution Time</th>
-                                    <th>Sifted Key</th>
-                                    <th>QBER (No Eve)</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr>
-                                    <td>100</td>
-                                    <td>~100ms</td>
-                                    <td>~50 bits</td>
-                                    <td>0%</td>
-                                </tr>
-                                <tr>
-                                    <td>500</td>
-                                    <td>~300ms</td>
-                                    <td>~250 bits</td>
-                                    <td>0%</td>
-                                </tr>
-                                <tr>
-                                    <td>1000</td>
-                                    <td>~500ms</td>
-                                    <td>~500 bits</td>
-                                    <td>0%</td>
-                                </tr>
-                            </tbody>
-                        </table>
-                    </div>
-                </section>
-
-                <section class="doc-section" id="results">
-                    <h2>📈 Results & Metrics</h2>
-
-                    <h3>Project Statistics</h3>
-                    <ul>
-                        <li><strong>Core Modules:</strong> 6</li>
-                        <li><strong>Unit Tests:</strong> 31 (all passing)</li>
-                        <li><strong>Code Coverage:</strong> >95%</li>
-                        <li><strong>Lines of Code:</strong> ~2,000</li>
-                        <li><strong>Documentation:</strong> 11 comprehensive guides</li>
-                        <li><strong>API Endpoints:</strong> 5</li>
-                    </ul>
-
-                    <h3>Validation Results</h3>
-                    <div class="success">
-                        <strong>✓ Protocol Correctness:</strong> All 31 tests passing<br>
-                        <strong>✓ Security Detection:</strong> Eve detection rate ~100%<br>
-                        <strong>✓ Key Generation:</strong> Sift efficiency ~50%<br>
-                        <strong>✓ Encryption:</strong> Message encryption/decryption verified<br>
-                        <strong>✓ Performance:</strong> Sub-second execution for 1000 qubits
-                    </div>
-
-                    <h3>Eavesdropping Detection Efficiency</h3>
-                    <p>
-                        The system successfully detects eavesdropping attempts with high confidence:
-                    </p>
-                    <ul>
-                        <li>QBER elevation from 0% to ~25% with Eve present</li>
-                        <li>Detection threshold at 11% provides safety margin</li>
-                        <li>Statistical significance increases with more qubits</li>
-                        <li>False positive rate: <1% (due to quantum noise)</li>
-                    </ul>
-                </section>
-
-                <section class="doc-section" id="references">
-                    <h2>📚 References</h2>
-
-                    <h3>Original Paper</h3>
-                    <ul>
-                        <li>Bennett, C. H., & Brassard, G. (1984). "Quantum cryptography: Public key distribution and coin tossing"</li>
-                    </ul>
-
-                    <h3>Related Topics</h3>
-                    <ul>
-                        <li>Quantum Mechanics Fundamentals</li>
-                        <li>Cryptography and Security</li>
-                        <li>Quantum Computing</li>
-                        <li>Information Theory</li>
-                        <li>Photon Polarization</li>
-                    </ul>
-
-                    <h3>Further Reading</h3>
-                    <ul>
-                        <li>Wikipedia: BB84 Protocol</li>
-                        <li>Wikipedia: Quantum Cryptography</li>
-                        <li>Wikipedia: Quantum Key Distribution</li>
-                    </ul>
-
-                    <div class="highlight">
-                        <strong>Note:</strong> This is an educational implementation. For production use with real secrets, 
-                        additional security measures and authenticated classical channels are required.
-                    </div>
-                </section>
-            </main>
-        </div>
-    </div>
-
-    <footer>
-        <p>
-            Quantum Key Distribution (QKD) BB84 Protocol Implementation<br>
-            Ensuring Confidentiality with Quantum Mechanics<br>
-            <small>© 2024 | MIT License | Production Ready</small>
-        </p>
-    </footer>
-
-    <script>
-        // Smooth scrolling for sidebar links
-        document.querySelectorAll('.sidebar-links a').forEach(link => {
-            link.addEventListener('click', function(e) {
-                e.preventDefault();
-                const target = document.querySelector(this.getAttribute('href'));
-                if (target) {
-                    target.scrollIntoView({ behavior: 'smooth' });
-                    document.querySelectorAll('.sidebar-links a').forEach(l => l.classList.remove('active'));
-                    this.classList.add('active');
-                }
-            });
-        });
-
-        // Update active link on scroll
-        window.addEventListener('scroll', () => {
-            const sections = document.querySelectorAll('.doc-section');
-            let current = '';
-            sections.forEach(section => {
-                const sectionTop = section.offsetTop;
-                if (pageYOffset >= sectionTop - 200) {
-                    current = section.getAttribute('id');
-                }
-            });
-            document.querySelectorAll('.sidebar-links a').forEach(link => {
-                link.classList.remove('active');
-                if (link.getAttribute('href') === '#' + current) {
                     link.classList.add('active');
                 }
             });
